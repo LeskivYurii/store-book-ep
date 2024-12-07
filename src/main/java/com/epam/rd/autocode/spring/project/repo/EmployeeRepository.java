@@ -1,5 +1,8 @@
 package com.epam.rd.autocode.spring.project.repo;
 
-public interface EmployeeRepository {
+import com.epam.rd.autocode.spring.project.model.Employee;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface EmployeeRepository extends JpaRepository<Employee, Long> {
     // TODO Place your code here
 }
