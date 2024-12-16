@@ -26,13 +26,15 @@ public class BookDTO{
     @NotNull(message = "Age group of the book can't be null!")
     private AgeGroup ageGroup;
     @DecimalMin(value = "0.0", inclusive = false, message = "Price of the book can't be zero or less!")
+    @NotNull(message = "Price of the book can't be null!")
     private BigDecimal price;
     @NotNull(message = "Publication date of the book can't be null!")
-        @DateTimeFormat(pattern = "dd.MM.yyyy", fallbackPatterns = {"dd-MM-yyyy", "MM.dd.yyyy", "MM-dd-yyyy"})
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate publicationDate;
     @NotBlank(message = "Author of the book can't be empty or null!")
     private String author;
     @Min(value = 1, message = "Pages of the book can't be zero or less!")
+    @NotNull(message = "Pages of the book can't be null!")
     private Integer pages;
     @NotBlank(message = "Characteristics of the book can't be empty or null!")
     private String characteristics;
