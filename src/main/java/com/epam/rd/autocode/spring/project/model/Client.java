@@ -3,7 +3,6 @@ package com.epam.rd.autocode.spring.project.model;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -24,4 +23,5 @@ public class Client extends User {
         super(id, email, password, name);
         this.balance = balance;
     }
+
 }

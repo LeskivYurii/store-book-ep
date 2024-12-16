@@ -1,5 +1,80 @@
 package com.epam.rd.autocode.spring.project.controller;
 
+import com.epam.rd.autocode.spring.project.dto.ClientDTO;
+import com.epam.rd.autocode.spring.project.service.ClientService;
+import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+
+@Controller
+@RequiredArgsConstructor
+@RequestMapping("/clients")
 public class ClientController {
-    // TODO Place your code here
+
+    private static final String CLIENT_ATTRIBUTE = "client";
+
+    private final ClientService clientService;
+
+    @GetMapping
+    public String getAllClient(@PageableDefault Pageable pageable, Model model) {
+        model.addAttribute("clients", clientService.getAllClients(pageable));
+        return "/client/client-list";
+    }
+
+    @GetMapping("/{email}")
+    public String getClientByEmail(@PathVariable String email, Model model) {
+        model.addAttribute(CLIENT_ATTRIBUTE, clientService.getClientByEmail(email));
+        return "/client/client-details";
+    }
+
+    @GetMapping("/{email}/edit-page")
+    public String getEditPage(@PathVariable String email, Model model) {
+        model.addAttribute(CLIENT_ATTRIBUTE, clientService.getClientByEmail(email));
+        return "/client/client-edit";
+    }
+
+    @GetMapping("/create-page")
+    public String getCreatePage(@ModelAttribute(name = CLIENT_ATTRIBUTE) ClientDTO clientDTO) {
+        return "/client/client-create";
+    }
+
+    @PostMapping
+    public String createClient(@ModelAttribute @Valid ClientDTO clientDTO, BindingResult bindingResult) {
+        if(bindingResult.hasErrors()) {
+            return "/client/client-create";
+        }
+        clientService.addClient(clientDTO);
+        return "redirect:/client/" + clientDTO.getEmail();
+    }
+
+    @PutMapping("/{email}")
+    public String updateClient(@PathVariable String email, @ModelAttribute(name = CLIENT_ATTRIBUTE) @Valid
+    ClientDTO clientDTO, BindingResult bindingResult, Model model) {
+        if(bindingResult.hasErrors()) {
+            model.addAttribute(CLIENT_ATTRIBUTE, clientService.getClientByEmail(email));
+            return "/client/client-edit";
+        }
+        clientService.updateClientByEmail(email, clientDTO);
+        return "/clients/" + clientDTO.getEmail();
+    }
+
+    @DeleteMapping("/{email}")
+    public String deleteClientByEmail(@PathVariable String email) {
+        clientService.deleteClientByEmail(email);
+        return "redirect:/clients";
+    }
+
+
 }
