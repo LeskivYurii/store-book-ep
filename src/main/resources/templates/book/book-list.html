@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Books</title>
+</head>
+<body>
+
+    <div>
+        <table th:colspan="2" border="bold">
+           <tr>
+               <th>Name</th>
+               <th>Genre</th>
+               <th>Age group</th>
+               <th>Price</th>
+               <th>Publication date</th>
+               <th>Author</th>
+               <th>Pages</th>
+               <th>Characteristics</th>
+               <th>Description</th>
+               <th>Language</th>
+               <th>Operation</th>
+           </tr>
+            <tr th:each="book:  ${books.getContent()}">
+                <td th:text="${book.getName()}"></td>
+                <td th:text="${book.getGenre()}"></td>
+                <td th:text="${book.getAgeGroup().name().substring(0,1) + book.getAgeGroup().name().substring(1).toLowerCase()}"></td>
+                <td th:text="${book.getPrice()}"></td>
+                <td th:text="${book.getPublicationDate()}"></td>
+                <td th:text="${book.getAuthor()}"></td>
+                <td th:text="${book.getPages()}"></td>
+                <td th:text="${book.getCharacteristics()}"></td>
+                <td th:text="${book.getDescription()}"></td>
+                <td th:text="${book.getLanguage().name().substring(0,1) + book.getLanguage().name().substring(1).toLowerCase()}"></td>
+                <td>       <form th:action="@{/books/{name}(name=${book.name})}" th:method="delete">
+                    <input type="submit" value="Delete">
+                </form>
+                    <form th:action="@{/books/{name}/edit(name=${book.name})}" th:method="get">
+                        <input type="submit" value="Update">
+                    </form>
+                    <form th:action="@{/books/{name}(name=${book.name})}" th:method="get">
+                        <input type="submit" value="Read">
+                    </form></td>
+            </tr>
+        </table>
+    </div>
+
+</body>
+</html>

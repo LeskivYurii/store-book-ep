@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Book</title>
+</head>
+<body>
+
+    <div th:object="${book}">
+        <p th:text="${'Name: ' + book.getName()}"></p>
+        <p th:text="${'Genre: ' + book.getGenre()}"></p>
+        <p th:text="${'Age group: ' + book.getAgeGroup().name().substring(0,1) + book.getAgeGroup().name().substring(1).toLowerCase()}"></p>
+        <p th:text="${'Price: ' + book.getPrice()}"></p>
+        <p th:text="${'Publication date: ' + book.getPublicationDate()}"></p>
+        <p th:text="${'Author: ' + book.getAuthor()}"></p>
+        <p th:text="${'Pages: ' + book.getPrice()}"></p>
+        <p th:text="${'Characteristics: ' + book.getCharacteristics()}"></p>
+        <p th:text="${'Description: ' + book.getDescription()}"></p>
+        <p th:text="${'Language: ' + book.getLanguage().name().substring(0,1) + book.getLanguage().name().substring(1).toLowerCase()}"></p>
+    </div>
+    <form th:action="@{/books/{name}(name=${book.name})}" th:method="delete">
+        <input type="submit" value="Delete">
+    </form>
+    <form th:action="@{/books/{name}/edit(name=${book.name})}" th:method="get">
+        <input type="submit" value="Update">
+    </form>
+</body>
+</html>
