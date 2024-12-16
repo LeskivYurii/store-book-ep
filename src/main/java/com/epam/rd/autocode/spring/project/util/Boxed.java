@@ -51,4 +51,12 @@ public class Boxed<T> {
         }
         return this.value;
     }
+
+    public void ifPresentOrElseThrow(Consumer<T> consumer, Supplier<? extends RuntimeException> error) {
+        if(this.value == null || consumer == null) {
+           throw  error == null ? new IllegalArgumentException("No Error was supplied!") : error.get();
+        } else {
+            consumer.accept(this.value);
+        }
+    }
 }
