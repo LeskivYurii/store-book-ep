@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Create Employee</title>
+</head>
+<body>
+<form th:action="@{/employees}" th:method="POST" th:object="${employee}">
+    <div>
+        <label for="name">Name: </label>
+        <br th:if="${#fields.hasErrors('name')}">
+        <small th:if="${#fields.hasErrors('name')}" style="color: red" th:errors="*{name}"></small>
+        <br th:if="${#fields.hasErrors('name')}">
+        <input id="name" type="text" th:value="${employee.getName()}" th:field="*{name}">
+    </div>
+    <div>
+        <label for="email">Email: </label>
+        <br th:if="${#fields.hasErrors('email')}">
+        <small th:if="${#fields.hasErrors('email')}" style="color: red" th:errors="*{email}"></small>
+        <br th:if="${#fields.hasErrors('email')}">
+        <input id="email" type="email" th:value="${employee.getName()}" th:field="*{email}">
+    </div>
+    <div>
+        <label for="password">Password: </label>
+        <br th:if="${#fields.hasErrors('password')}">
+        <small th:if="${#fields.hasErrors('password')}" style="color: red" th:errors="*{password}"></small>
+        <br th:if="${#fields.hasErrors('password')}">
+        <input id="password" type="password" th:value="${employee.getPassword()}" th:field="*{password}">
+    </div>
+    <div>
+        <label for="phone">Phone: </label>
+        <br th:if="${#fields.hasErrors('phone')}">
+        <small th:if="${#fields.hasErrors('phone')}" style="color: red" th:errors="*{phone}"></small>
+        <br th:if="${#fields.hasErrors('phone')}">
+        <input id="phone" type="password" th:value="${employee.getPhone()}" th:field="*{phone}">
+    </div>
+    <div>
+        <label for="birthDate">Birthdate: </label>
+        <br th:if="${#fields.hasErrors('birthDate')}">
+        <small th:if="${#fields.hasErrors('birthDate')}" style="color: red" th:errors="*{birthDate}"></small>
+        <br th:if="${#fields.hasErrors('birthDate')}">
+        <input id="birthDate" type="date" th:value="${employee.getBirthDate()}" th:field="*{birthDate}">
+    </div>
+    <input type="submit" value="Create">
+</form>
+</body>
+</html>
