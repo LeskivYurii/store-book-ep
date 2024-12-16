@@ -1,42 +1,69 @@
 package com.epam.rd.autocode.spring.project.service.impl;
 
 import com.epam.rd.autocode.spring.project.dto.EmployeeDTO;
+import com.epam.rd.autocode.spring.project.exception.AlreadyExistException;
+import com.epam.rd.autocode.spring.project.exception.NotFoundException;
+import com.epam.rd.autocode.spring.project.mapper.EmployeeMapper;
 import com.epam.rd.autocode.spring.project.repo.EmployeeRepository;
 import com.epam.rd.autocode.spring.project.service.EmployeeService;
+import com.epam.rd.autocode.spring.project.util.Boxed;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor
 public class EmployeeServiceImpl implements EmployeeService {
 
+    public static final String EMPLOYEE_NOT_FOUND_ERROR_MESSAGE = "Employee with %s email wasn't found!";
+
     private final EmployeeRepository employeeRepository;
+    private final EmployeeMapper employeeMapper;
 
     @Override
-    public List<EmployeeDTO> getAllEmployees() {
-        return List.of();
+    public Page<EmployeeDTO> getAllEmployees(Pageable pageable) {
+        return employeeRepository.findAll(pageable).map(employeeMapper::toEmployeeDto);
     }
 
     @Override
     public EmployeeDTO getEmployeeByEmail(String email) {
-        return null;
+        return Boxed
+                .of(email)
+                .map(employeeRepository::findEmployeeByEmail)
+                .map(employeeMapper::toEmployeeDto)
+                .orElseThrow(() -> new NotFoundException(EMPLOYEE_NOT_FOUND_ERROR_MESSAGE.formatted(email)));
     }
 
     @Override
-    public EmployeeDTO updateEmployeeByEmail(String email, EmployeeDTO employee) {
-        return null;
+    public EmployeeDTO updateEmployeeByEmail(String email, EmployeeDTO employeeDto) {
+        return Boxed
+                .of(email)
+                .map(employeeRepository::findEmployeeByEmail)
+                .doWith(employee1 -> employeeMapper.updateEmployee(employee1, employeeDto))
+                .map(employeeRepository::save)
+                .map(employeeMapper::toEmployeeDto)
+                .orElseThrow(() -> new NotFoundException(EMPLOYEE_NOT_FOUND_ERROR_MESSAGE.formatted(email)));
     }
 
     @Override
     public void deleteEmployeeByEmail(String email) {
-
+        Boxed
+                .of(email)
+                .map(employeeRepository::findEmployeeByEmail)
+                .ifPresentOrElseThrow(employeeRepository::delete,
+                        () -> new NotFoundException(EMPLOYEE_NOT_FOUND_ERROR_MESSAGE.formatted(email)));
     }
 
     @Override
-    public EmployeeDTO addEmployee(EmployeeDTO employee) {
-        return null;
+    public EmployeeDTO addEmployee(EmployeeDTO employeeDTO) {
+        return Boxed
+                .of(employeeDTO)
+                .filter(employeeDTO1 -> !employeeRepository.existsByEmail(employeeDTO.getEmail()))
+                .map(employeeMapper::toEmployee)
+                .map(employeeRepository::save)
+                .map(employeeMapper::toEmployeeDto)
+                .orElseThrow(() -> new AlreadyExistException("Employee with %s email already exist!".formatted(employeeDTO.getEmail())));
     }
 
 }
