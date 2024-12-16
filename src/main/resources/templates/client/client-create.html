@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Create client</title>
+</head>
+<body>
+<form th:action="@{/clients}" th:method="POST" th:object="${client}">
+    <div>
+        <label for="name">Name: </label>
+        <br th:if="${#fields.hasErrors('name')}">
+        <small th:if="${#fields.hasErrors('name')}" style="color: red" th:errors="*{name}"></small>
+        <br th:if="${#fields.hasErrors('name')}">
+        <input id="name" type="text" th:value="${client.getName()}" th:field="*{name}">
+    </div>
+    <div>
+        <label for="email">Email: </label>
+        <br th:if="${#fields.hasErrors('email')}">
+        <small th:if="${#fields.hasErrors('email')}" style="color: red" th:errors="*{email}"></small>
+        <br th:if="${#fields.hasErrors('email')}">
+        <input id="email" type="email" th:value="${client.getName()}" th:field="*{email}">
+    </div>
+    <div>
+        <label for="genre">Genre: </label>
+        <br th:if="${#fields.hasErrors('password')}">
+        <small th:if="${#fields.hasErrors('password')}" style="color: red" th:errors="*{password}"></small>
+        <br th:if="${#fields.hasErrors('password')}">
+        <input id="genre" type="password" th:value="${client.getPassword()}" th:field="*{password}">
+    </div>
+
+    <input type="submit" value="Create">
+</form>
+</body>
+</html>
