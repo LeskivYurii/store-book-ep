@@ -1,7 +1,11 @@
 package com.epam.rd.autocode.spring.project.model;
 
+import com.epam.rd.autocode.spring.project.model.enums.OrderStatus;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EntityListeners;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -13,9 +17,13 @@ import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,6 +32,7 @@ import java.util.List;
 @NoArgsConstructor
 @Entity
 @Table(name = "ORDERS")
+@EntityListeners(AuditingEntityListener.class)
 public class Order {
 
     @Id
@@ -35,11 +44,17 @@ public class Order {
     @ManyToOne
     @JoinColumn(name = "employee_id")
     private Employee employee;
-    @Column(name = "order_date", nullable = false)
-    private LocalDateTime orderDate;
     @Column(nullable = false)
     private BigDecimal price;
+    @Enumerated(EnumType.STRING)
+    private OrderStatus status;
     @OneToMany(mappedBy = "order")
     private List<BookItem> bookItems = new ArrayList<>();
+    @Column(name="created_at", nullable = false)
+    @CreationTimestamp
+    private OffsetDateTime createdAt;
+    @Column(name = "updated_at", nullable = false)
+    @UpdateTimestamp
+    private OffsetDateTime updatedAt;
 
 }
