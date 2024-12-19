@@ -3,9 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <title>Book</title>
+    <link rel="stylesheet" href="../static/css/style.css">
 </head>
 <body>
-
+<div th:insert="~{header.html}"></div>
     <div th:object="${book}">
         <p th:text="${'Name: ' + book.getName()}"></p>
         <p th:text="${'Genre: ' + book.getGenre()}"></p>

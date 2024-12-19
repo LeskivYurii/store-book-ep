@@ -3,8 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <title>Books</title>
+    <link rel="stylesheet" type="text/css" th:ref="@{/static/css/style.css}">
 </head>
 <body>
+<div th:replace="~{/header :: header}"></div>
 
     <div>
         <table th:colspan="2" border="bold">
@@ -13,11 +15,7 @@
                <th>Genre</th>
                <th>Age group</th>
                <th>Price</th>
-               <th>Publication date</th>
                <th>Author</th>
-               <th>Pages</th>
-               <th>Characteristics</th>
-               <th>Description</th>
                <th>Language</th>
                <th>Operation</th>
            </tr>
@@ -26,19 +24,15 @@
                 <td th:text="${book.getGenre()}"></td>
                 <td th:text="${book.getAgeGroup().name().substring(0,1) + book.getAgeGroup().name().substring(1).toLowerCase()}"></td>
                 <td th:text="${book.getPrice()}"></td>
-                <td th:text="${book.getPublicationDate()}"></td>
                 <td th:text="${book.getAuthor()}"></td>
-                <td th:text="${book.getPages()}"></td>
-                <td th:text="${book.getCharacteristics()}"></td>
-                <td th:text="${book.getDescription()}"></td>
                 <td th:text="${book.getLanguage().name().substring(0,1) + book.getLanguage().name().substring(1).toLowerCase()}"></td>
-                <td>       <form th:action="@{/books/{name}(name=${book.name})}" th:method="delete">
+                <td>       <form th:action="@{/books/{id}(id=${book.id})}" th:method="delete">
                     <input type="submit" value="Delete">
                 </form>
-                    <form th:action="@{/books/{name}/edit(name=${book.name})}" th:method="get">
+                    <form th:action="@{/books/{id}/edit-page(id=${book.id})}" th:method="get">
                         <input type="submit" value="Update">
                     </form>
-                    <form th:action="@{/books/{name}(name=${book.name})}" th:method="get">
+                    <form th:action="@{/books/{id}(id=${book.id})}" th:method="get">
                         <input type="submit" value="Read">
                     </form></td>
             </tr>

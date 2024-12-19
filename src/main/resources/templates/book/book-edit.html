@@ -3,8 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <title>Edit</title>
+    <link rel="stylesheet" href="../static/css/style.css">
 </head>
 <body>
+<div th:insert="~{header.html}"></div>
     <form th:action="@{/books/{name}(name=${book.name})}" th:method="PUT" th:object="${book}">
 
         <div>

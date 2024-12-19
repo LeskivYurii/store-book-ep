@@ -3,10 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <title>Create</title>
+    <link rel="stylesheet" href="../static/css/style.css">
+
 </head>
 <body>
 <form th:action="@{/books}" th:method="POST" th:object="${book}">
-
+    <div th:insert="~{header.html}"></div>
     <div>
         <label for="name">Name: </label>
         <br th:if="${#fields.hasErrors('name')}">
