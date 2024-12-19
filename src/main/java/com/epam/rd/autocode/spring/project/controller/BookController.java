@@ -1,6 +1,6 @@
 package com.epam.rd.autocode.spring.project.controller;
 
-import com.epam.rd.autocode.spring.project.dto.BookDTO;
+import com.epam.rd.autocode.spring.project.dto.request.ModifyBookRequest;
 import com.epam.rd.autocode.spring.project.model.enums.AgeGroup;
 import com.epam.rd.autocode.spring.project.model.enums.Language;
 import com.epam.rd.autocode.spring.project.service.BookService;
@@ -24,6 +24,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/books")
 public class BookController {
 
+    public static final String AGE_GROUP_ATTRIBUTE = "ageGroups";
+    public static final String LANGUAGES_ATTRIBUTE = "languages";
     private final BookService bookService;
 
     @GetMapping
@@ -32,49 +34,49 @@ public class BookController {
         return "/book/book-list";
     }
 
-    @GetMapping("/{name}")
-    public String findBookByName(@PathVariable String name, Model model) {
-     model.addAttribute("book", bookService.getBookByName(name));
-     return "/book/book-details";
+    @GetMapping("/{id}")
+    public String findBookById(@PathVariable Long id, Model model) {
+        model.addAttribute("book", bookService.getBookById(id));
+        return "/book/book-details";
     }
 
-    @DeleteMapping("/{name}")
-    public String deleteBook(@PathVariable String name) {
-        bookService.deleteBookByName(name);
+    @DeleteMapping("/{id}")
+    public String deleteBook(@PathVariable Long id) {
+        bookService.deleteBookById(id);
         return "redirect:/books";
     }
 
-    @GetMapping("/{name}/edit")
-    public String getEditPage(@PathVariable String name, Model model) {
-        model.addAttribute("book", bookService.getBookByName(name));
-        model.addAttribute("ageGroups", AgeGroup.values());
-        model.addAttribute("languages", Language.values());
+    @GetMapping("/{id}/edit")
+    public String getEditPage(@PathVariable Long id, Model model) {
+        model.addAttribute("book", bookService.getBookById(id));
+        model.addAttribute(AGE_GROUP_ATTRIBUTE, AgeGroup.values());
+        model.addAttribute(LANGUAGES_ATTRIBUTE, Language.values());
         return "/book/book-edit";
     }
 
-    @PutMapping("/{name}")
-    public String updateBook(@PathVariable String name, @ModelAttribute(name = "book") @Valid BookDTO book, BindingResult bindingResult,
+    @PutMapping("/{id}")
+    public String updateBook(@PathVariable Long id, @ModelAttribute(name = "book") @Valid ModifyBookRequest book, BindingResult bindingResult,
                              Model model) {
         if(bindingResult.hasErrors()) {
-            model.addAttribute("ageGroups", AgeGroup.values());
-            model.addAttribute("languages", Language.values());
+            model.addAttribute(AGE_GROUP_ATTRIBUTE, AgeGroup.values());
+            model.addAttribute(LANGUAGES_ATTRIBUTE, Language.values());
             return "/book/book-edit";
         }
-        bookService.updateBookByName(name, book);
-        return "redirect:/books/" + name;
+        bookService.updateBookById(id, book);
+        return "redirect:/books/" + id;
     }
 
     @GetMapping("/create-page")
-    public String getCreatePage(@ModelAttribute(name = "book") BookDTO bookDTO) {
+    public String getCreatePage(@ModelAttribute(name = "book") ModifyBookRequest modifyBookRequest) {
         return "/book/book-create";
     }
 
     @PostMapping
-    public String createBook(@ModelAttribute(name = "book") @Valid BookDTO book, BindingResult bindingResult,
+    public String createBook(@ModelAttribute(name = "book") @Valid ModifyBookRequest book, BindingResult bindingResult,
                              Model model) {
         if(bindingResult.hasErrors()) {
-            model.addAttribute("ageGroups", AgeGroup.values());
-            model.addAttribute("languages", Language.values());
+            model.addAttribute(AGE_GROUP_ATTRIBUTE, AgeGroup.values());
+            model.addAttribute(LANGUAGES_ATTRIBUTE, Language.values());
             return "/book/book-create";
         }
         bookService.addBook(book);

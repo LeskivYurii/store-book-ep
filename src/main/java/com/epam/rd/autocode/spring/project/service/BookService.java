@@ -1,18 +1,26 @@
 package com.epam.rd.autocode.spring.project.service;
 
-import com.epam.rd.autocode.spring.project.dto.BookDTO;
+import com.epam.rd.autocode.spring.project.dto.request.ModifyBookRequest;
+import com.epam.rd.autocode.spring.project.dto.response.GetBookDetailsResponse;
+import com.epam.rd.autocode.spring.project.dto.response.GetBookListResponse;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 public interface BookService {
 
-    Page<BookDTO> getAllBooks(Pageable pageable);
+    Page<GetBookListResponse> getAllBooks(Pageable pageable);
 
-    BookDTO getBookByName(String name);
+    GetBookDetailsResponse getBookByName(String name);
 
-    BookDTO updateBookByName(String name, BookDTO book);
+    GetBookDetailsResponse getBookById(Long id);
+
+    GetBookDetailsResponse updateBookByName(String name, ModifyBookRequest book);
+
+    GetBookDetailsResponse updateBookById(Long id, ModifyBookRequest book);
 
     void deleteBookByName(String name);
 
-    BookDTO addBook(BookDTO book);
+    void deleteBookById(Long id);
+
+    GetBookDetailsResponse addBook(ModifyBookRequest book);
 }

@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 public class BookItemDTO {
 
     @NotNull(message = "Book can't be null!")
-    private String bookName;
+    private Long bookId;
     @Min(value = 1, message = "Quantity of product can't be zero or less!")
     private Integer quantity;
 

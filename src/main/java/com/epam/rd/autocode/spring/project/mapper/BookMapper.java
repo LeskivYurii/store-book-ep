@@ -1,6 +1,8 @@
 package com.epam.rd.autocode.spring.project.mapper;
 
-import com.epam.rd.autocode.spring.project.dto.BookDTO;
+import com.epam.rd.autocode.spring.project.dto.request.ModifyBookRequest;
+import com.epam.rd.autocode.spring.project.dto.response.GetBookDetailsResponse;
+import com.epam.rd.autocode.spring.project.dto.response.GetBookListResponse;
 import com.epam.rd.autocode.spring.project.model.Book;
 import org.mapstruct.Mapper;
 import org.mapstruct.MappingTarget;
@@ -9,9 +11,12 @@ import org.mapstruct.ReportingPolicy;
 @Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface BookMapper {
 
-    BookDTO toBookDTO(Book book);
+    GetBookDetailsResponse toGetBookDetailsResponse(Book book);
 
-    Book toBook(BookDTO bookDTO);
+    GetBookListResponse toGetBookListResponse(Book book);
 
-    void updateBook(@MappingTarget Book book, BookDTO bookDTO);
+    Book toBook(ModifyBookRequest modifyBookRequest);
+
+    void updateBook(@MappingTarget Book book, ModifyBookRequest modifyBookRequest);
+
 }

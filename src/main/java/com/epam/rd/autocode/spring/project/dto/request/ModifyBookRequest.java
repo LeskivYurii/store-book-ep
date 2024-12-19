@@ -1,4 +1,4 @@
-package com.epam.rd.autocode.spring.project.dto;
+package com.epam.rd.autocode.spring.project.dto.request;
 
 import com.epam.rd.autocode.spring.project.model.enums.AgeGroup;
 import com.epam.rd.autocode.spring.project.model.enums.Language;
@@ -17,7 +17,7 @@ import java.time.LocalDate;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class BookDTO{
+public class ModifyBookRequest {
 
     @NotBlank(message = "Name of the book can't be empty or null!")
     private String name;
@@ -36,10 +36,14 @@ public class BookDTO{
     @Min(value = 1, message = "Pages of the book can't be zero or less!")
     @NotNull(message = "Pages of the book can't be null!")
     private Integer pages;
+    @Min(value = 1, message = "Amount of the books can't be zero or less!")
+    @NotNull(message = "Amount of the book can't be null!")
+    private Integer quantity;
     @NotBlank(message = "Characteristics of the book can't be empty or null!")
     private String characteristics;
     @NotBlank(message = "Description of the book can't be empty or null!")
     private String description;
     @NotNull(message = "Language of the book can't be null!")
     private Language language;
+
 }
