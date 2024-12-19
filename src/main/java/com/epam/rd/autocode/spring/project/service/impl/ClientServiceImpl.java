@@ -1,6 +1,9 @@
 package com.epam.rd.autocode.spring.project.service.impl;
 
-import com.epam.rd.autocode.spring.project.dto.ClientDTO;
+import com.epam.rd.autocode.spring.project.dto.request.CreateClientRequest;
+import com.epam.rd.autocode.spring.project.dto.request.UpdateClientRequest;
+import com.epam.rd.autocode.spring.project.dto.response.GetClientDetailsResponse;
+import com.epam.rd.autocode.spring.project.dto.response.GetClientListResponse;
 import com.epam.rd.autocode.spring.project.exception.AlreadyExistException;
 import com.epam.rd.autocode.spring.project.exception.NotFoundException;
 import com.epam.rd.autocode.spring.project.mapper.ClientMapper;
@@ -12,8 +15,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-
 @Service
 @RequiredArgsConstructor
 public class ClientServiceImpl implements ClientService {
@@ -24,27 +25,27 @@ public class ClientServiceImpl implements ClientService {
     private final ClientMapper clientMapper;
 
     @Override
-    public Page<ClientDTO> getAllClients(Pageable pageable) {
-        return clientRepository.findAll(pageable).map(clientMapper::toClientDto);
+    public Page<GetClientListResponse> getAllClients(Pageable pageable) {
+        return clientRepository.findAll(pageable).map(clientMapper::toGetClientListResponse);
     }
 
     @Override
-    public ClientDTO getClientByEmail(String email) {
+    public GetClientDetailsResponse getClientByEmail(String email) {
         return Boxed
                 .of(email)
-                .map(clientRepository::findClientByEmail)
-                .map(clientMapper::toClientDto)
+                .flatOpt(clientRepository::findClientByEmail)
+                .map(clientMapper::toGetClientDetailsResponse)
                 .orElseThrow(() -> new NotFoundException(CLIENT_NOT_FOUND_ERROR_MESSAGE.formatted(email)));
     }
 
     @Override
-    public ClientDTO updateClientByEmail(String email, ClientDTO clientDTO) {
+    public GetClientDetailsResponse updateClientByEmail(String email, UpdateClientRequest clientDTO) {
         return Boxed
                 .of(email)
-                .map(clientRepository::findClientByEmail)
+                .flatOpt(clientRepository::findClientByEmail)
                 .doWith(client1 -> clientMapper.updateClient(client1, clientDTO))
                 .map(clientRepository::save)
-                .map(clientMapper::toClientDto)
+                .map(clientMapper::toGetClientDetailsResponse)
                 .orElseThrow(() -> new NotFoundException(CLIENT_NOT_FOUND_ERROR_MESSAGE.formatted(email)));
     }
 
@@ -52,19 +53,19 @@ public class ClientServiceImpl implements ClientService {
     public void deleteClientByEmail(String email) {
         Boxed
                 .of(email)
-                .map(clientRepository::findClientByEmail)
+                .flatOpt(clientRepository::findClientByEmail)
                 .ifPresentOrElseThrow(clientRepository::delete,
                         () -> new NotFoundException(CLIENT_NOT_FOUND_ERROR_MESSAGE.formatted(email)));
     }
 
     @Override
-    public ClientDTO addClient(ClientDTO client) {
+    public GetClientDetailsResponse addClient(CreateClientRequest client) {
         return Boxed
                 .of(client)
                 .filter(client1 -> !clientRepository.existsByEmail(client1.getEmail()))
                 .map(clientMapper::toClient)
                 .map(clientRepository::save)
-                .map(clientMapper::toClientDto)
+                .map(clientMapper::toGetClientDetailsResponse)
                 .orElseThrow(() -> new AlreadyExistException("Client with %s email already exist!".formatted(client.getEmail())));
     }
 

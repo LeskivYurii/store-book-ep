@@ -1,20 +1,21 @@
 package com.epam.rd.autocode.spring.project.service;
 
-import com.epam.rd.autocode.spring.project.dto.ClientDTO;
+import com.epam.rd.autocode.spring.project.dto.request.CreateClientRequest;
+import com.epam.rd.autocode.spring.project.dto.request.UpdateClientRequest;
+import com.epam.rd.autocode.spring.project.dto.response.GetClientDetailsResponse;
+import com.epam.rd.autocode.spring.project.dto.response.GetClientListResponse;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
-import java.util.List;
-
 public interface ClientService {
 
-    Page<ClientDTO> getAllClients(Pageable pageable);
+    Page<GetClientListResponse> getAllClients(Pageable pageable);
 
-    ClientDTO getClientByEmail(String email);
+    GetClientDetailsResponse getClientByEmail(String email);
 
-    ClientDTO updateClientByEmail(String email, ClientDTO client);
+    GetClientDetailsResponse updateClientByEmail(String email, UpdateClientRequest client);
 
     void deleteClientByEmail(String email);
 
-    ClientDTO addClient(ClientDTO client);
+    GetClientDetailsResponse addClient(CreateClientRequest client);
 }

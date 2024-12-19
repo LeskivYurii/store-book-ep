@@ -1,7 +1,9 @@
 package com.epam.rd.autocode.spring.project.controller;
 
-import com.epam.rd.autocode.spring.project.dto.ClientDTO;
+import com.epam.rd.autocode.spring.project.dto.request.CreateClientRequest;
+import com.epam.rd.autocode.spring.project.dto.request.UpdateClientRequest;
 import com.epam.rd.autocode.spring.project.service.ClientService;
+import com.epam.rd.autocode.spring.project.validation.validator.UserOldPasswordValidation;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
@@ -16,7 +18,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 @RequiredArgsConstructor
@@ -26,6 +27,7 @@ public class ClientController {
     private static final String CLIENT_ATTRIBUTE = "client";
 
     private final ClientService clientService;
+    private final UserOldPasswordValidation userOldPasswordValidation;
 
     @GetMapping
     public String getAllClient(@PageableDefault Pageable pageable, Model model) {
@@ -41,33 +43,33 @@ public class ClientController {
 
     @GetMapping("/{email}/edit-page")
     public String getEditPage(@PathVariable String email, Model model) {
-        model.addAttribute(CLIENT_ATTRIBUTE, clientService.getClientByEmail(email));
+        model.addAttribute(CLIENT_ATTRIBUTE, new UpdateClientRequest(clientService.getClientByEmail(email)));
         return "/client/client-edit";
     }
 
     @GetMapping("/create-page")
-    public String getCreatePage(@ModelAttribute(name = CLIENT_ATTRIBUTE) ClientDTO clientDTO) {
+    public String getCreatePage(@ModelAttribute(name = CLIENT_ATTRIBUTE) CreateClientRequest clientDTO) {
         return "/client/client-create";
     }
 
     @PostMapping
-    public String createClient(@ModelAttribute @Valid ClientDTO clientDTO, BindingResult bindingResult) {
+    public String createClient(@ModelAttribute(name = CLIENT_ATTRIBUTE) @Valid CreateClientRequest clientDTO, BindingResult bindingResult) {
         if(bindingResult.hasErrors()) {
             return "/client/client-create";
         }
         clientService.addClient(clientDTO);
-        return "redirect:/client/" + clientDTO.getEmail();
+        return "redirect:/auth/login-page";
     }
 
     @PutMapping("/{email}")
     public String updateClient(@PathVariable String email, @ModelAttribute(name = CLIENT_ATTRIBUTE) @Valid
-    ClientDTO clientDTO, BindingResult bindingResult, Model model) {
+    UpdateClientRequest clientDTO, BindingResult bindingResult) {
+        userOldPasswordValidation.validate(clientDTO, bindingResult);
         if(bindingResult.hasErrors()) {
-            model.addAttribute(CLIENT_ATTRIBUTE, clientService.getClientByEmail(email));
             return "/client/client-edit";
         }
         clientService.updateClientByEmail(email, clientDTO);
-        return "/clients/" + clientDTO.getEmail();
+        return "redirect:/clients/" + clientDTO.getEmail();
     }
 
     @DeleteMapping("/{email}")
