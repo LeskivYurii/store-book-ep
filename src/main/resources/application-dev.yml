@@ -40,6 +40,11 @@ spring:
     hiddenmethod:
       filter:
         enabled: true
-logging:
-  level:
-    root: debug
+#logging:
+#  level:
+#    root: debug
+
+security:
+  jwt:
+    secret: ${JWT_SECRET}
+    expiration: ${JWT_EXPIRATION}
