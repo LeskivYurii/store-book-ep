@@ -1,11 +1,12 @@
-package com.epam.rd.autocode.spring.project.dto;
+package com.epam.rd.autocode.spring.project.dto.request;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.epam.rd.autocode.spring.project.validation.annotation.UniqueEmail;
+import com.epam.rd.autocode.spring.project.validation.annotation.ValidPassword;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Past;
+import jakarta.validation.constraints.Pattern;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -13,25 +14,29 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
 
-import static com.fasterxml.jackson.annotation.JsonProperty.Access.WRITE_ONLY;
-
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class EmployeeDTO{
+@ValidPassword
+public class CreateEmployeeRequest {
 
     @Email(message = "It's not email!")
     @NotBlank(message = "Email can't be empty!")
+    @UniqueEmail
     private String email;
     @NotBlank(message = "Password can't be empty or null!")
-    @JsonProperty(access = WRITE_ONLY)
+    @Pattern(regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d).{6,}$",
+            message = "Password must contain at least one number, lower case and upper case letters and be 6 symbols long!")
     private String password;
+    @Pattern(regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d).{6,}$",
+            message = "Password must contain at least one number, lower case and upper case letters and be 6 symbols long!")
+    private String confirmationPassword;
     @NotBlank(message = "Name can't be empty or null!")
     private String name;
     @NotBlank(message = "Phone can't be empty or null!")
     private String phone;
     @NotNull(message = "Birthday can't be null!")
-    @DateTimeFormat(pattern = "dd.MM.yyyy", fallbackPatterns = {"dd-MM-yyyy", "MM.dd.yyyy", "MM-dd-yyyy"})
+    @DateTimeFormat(pattern = "dd/MM/yyyy", fallbackPatterns = {"yyyy-MM-dd", "dd-MM-yyyy", "MM/dd/yyyy", "MM-dd-yyyy", "dd.MM.yyyy", "dd.MM.yyyy", "MM.dd.yyyy"})
     @Past(message = "Birthdate can't be in present or future time!")
     private LocalDate birthDate;
 

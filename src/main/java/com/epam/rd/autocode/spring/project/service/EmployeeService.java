@@ -1,20 +1,21 @@
 package com.epam.rd.autocode.spring.project.service;
 
-import com.epam.rd.autocode.spring.project.dto.EmployeeDTO;
+import com.epam.rd.autocode.spring.project.dto.request.CreateEmployeeRequest;
+import com.epam.rd.autocode.spring.project.dto.request.UpdateEmployeeRequest;
+import com.epam.rd.autocode.spring.project.dto.response.GetEmployeeDetailsResponse;
+import com.epam.rd.autocode.spring.project.dto.response.GetEmployeeListResponse;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
-import java.util.List;
-
 public interface EmployeeService {
 
-    Page<EmployeeDTO> getAllEmployees(Pageable pageable);
+    Page<GetEmployeeListResponse> getAllEmployees(Pageable pageable);
 
-    EmployeeDTO getEmployeeByEmail(String email);
+    GetEmployeeDetailsResponse getEmployeeByEmail(String email);
 
-    EmployeeDTO updateEmployeeByEmail(String email, EmployeeDTO employee);
+    GetEmployeeDetailsResponse updateEmployeeByEmail(String email, UpdateEmployeeRequest employee);
 
     void deleteEmployeeByEmail(String email);
 
-    EmployeeDTO addEmployee(EmployeeDTO employee);
+    GetEmployeeDetailsResponse addEmployee(CreateEmployeeRequest employee);
 }

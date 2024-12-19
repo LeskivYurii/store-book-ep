@@ -1,6 +1,9 @@
 package com.epam.rd.autocode.spring.project.service.impl;
 
-import com.epam.rd.autocode.spring.project.dto.EmployeeDTO;
+import com.epam.rd.autocode.spring.project.dto.request.CreateEmployeeRequest;
+import com.epam.rd.autocode.spring.project.dto.request.UpdateEmployeeRequest;
+import com.epam.rd.autocode.spring.project.dto.response.GetEmployeeDetailsResponse;
+import com.epam.rd.autocode.spring.project.dto.response.GetEmployeeListResponse;
 import com.epam.rd.autocode.spring.project.exception.AlreadyExistException;
 import com.epam.rd.autocode.spring.project.exception.NotFoundException;
 import com.epam.rd.autocode.spring.project.mapper.EmployeeMapper;
@@ -22,27 +25,27 @@ public class EmployeeServiceImpl implements EmployeeService {
     private final EmployeeMapper employeeMapper;
 
     @Override
-    public Page<EmployeeDTO> getAllEmployees(Pageable pageable) {
-        return employeeRepository.findAll(pageable).map(employeeMapper::toEmployeeDto);
+    public Page<GetEmployeeListResponse> getAllEmployees(Pageable pageable) {
+        return employeeRepository.findAll(pageable).map(employeeMapper::toGetEmployeeListResponse);
     }
 
     @Override
-    public EmployeeDTO getEmployeeByEmail(String email) {
+    public GetEmployeeDetailsResponse getEmployeeByEmail(String email) {
         return Boxed
                 .of(email)
                 .map(employeeRepository::findEmployeeByEmail)
-                .map(employeeMapper::toEmployeeDto)
+                .map(employeeMapper::toGetEmployeeDetailsResponse)
                 .orElseThrow(() -> new NotFoundException(EMPLOYEE_NOT_FOUND_ERROR_MESSAGE.formatted(email)));
     }
 
     @Override
-    public EmployeeDTO updateEmployeeByEmail(String email, EmployeeDTO employeeDto) {
+    public GetEmployeeDetailsResponse updateEmployeeByEmail(String email, UpdateEmployeeRequest employeeDto) {
         return Boxed
                 .of(email)
                 .map(employeeRepository::findEmployeeByEmail)
                 .doWith(employee1 -> employeeMapper.updateEmployee(employee1, employeeDto))
                 .map(employeeRepository::save)
-                .map(employeeMapper::toEmployeeDto)
+                .map(employeeMapper::toGetEmployeeDetailsResponse)
                 .orElseThrow(() -> new NotFoundException(EMPLOYEE_NOT_FOUND_ERROR_MESSAGE.formatted(email)));
     }
 
@@ -56,13 +59,13 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
-    public EmployeeDTO addEmployee(EmployeeDTO employeeDTO) {
+    public GetEmployeeDetailsResponse addEmployee(CreateEmployeeRequest employeeDTO) {
         return Boxed
                 .of(employeeDTO)
                 .filter(employeeDTO1 -> !employeeRepository.existsByEmail(employeeDTO.getEmail()))
                 .map(employeeMapper::toEmployee)
                 .map(employeeRepository::save)
-                .map(employeeMapper::toEmployeeDto)
+                .map(employeeMapper::toGetEmployeeDetailsResponse)
                 .orElseThrow(() -> new AlreadyExistException("Employee with %s email already exist!".formatted(employeeDTO.getEmail())));
     }
 

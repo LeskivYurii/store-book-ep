@@ -1,10 +1,11 @@
 package com.epam.rd.autocode.spring.project.controller;
 
-import com.epam.rd.autocode.spring.project.dto.EmployeeDTO;
+import com.epam.rd.autocode.spring.project.dto.request.CreateEmployeeRequest;
+import com.epam.rd.autocode.spring.project.dto.request.UpdateEmployeeRequest;
 import com.epam.rd.autocode.spring.project.service.EmployeeService;
+import com.epam.rd.autocode.spring.project.validation.validator.UserOldPasswordValidation;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.boot.Banner;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
@@ -23,7 +24,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/employees")
 public class EmployeeController {
 
+    private static final String EMPLOYEE_ATTRIBUTE = "employee";
+
     private final EmployeeService employeeService;
+    private final UserOldPasswordValidation userOldPasswordValidation;
 
     @GetMapping
     public String getAllEmployee(@PageableDefault Pageable pageable, Model model) {
@@ -33,21 +37,21 @@ public class EmployeeController {
 
     @GetMapping("/{email}")
     public String getEmployeeByEmail(@PathVariable String email, Model model) {
-        model.addAttribute("employee", employeeService.getEmployeeByEmail(email));
+        model.addAttribute(EMPLOYEE_ATTRIBUTE, employeeService.getEmployeeByEmail(email));
         return  "/employee/employee-details";
     }
 
     @GetMapping("/{email}/edit-page")
     public String getEditPage(@PathVariable String email, Model model) {
-        model.addAttribute("employee", employeeService.getEmployeeByEmail(email));
+        model.addAttribute(EMPLOYEE_ATTRIBUTE, new UpdateEmployeeRequest(employeeService.getEmployeeByEmail(email)));
         return "/employee/employee-edit";
     }
 
     @PutMapping("/{email}")
-    public String updateEmployee(@PathVariable(name = "email") String email, @ModelAttribute(name = "employee") @Valid
-    EmployeeDTO employeeDTO, BindingResult bindingResult, Model model) {
+    public String updateEmployee(@PathVariable(name = "email") String email, @ModelAttribute(name = EMPLOYEE_ATTRIBUTE) @Valid
+    UpdateEmployeeRequest employeeDTO, BindingResult bindingResult) {
+        userOldPasswordValidation.validate(employeeDTO, bindingResult);
         if(bindingResult.hasErrors()) {
-            model.addAttribute("employee", employeeService.getEmployeeByEmail(email));
             return "/employee/employee-edit";
         }
         employeeService.updateEmployeeByEmail(email, employeeDTO);
@@ -55,12 +59,12 @@ public class EmployeeController {
     }
 
     @GetMapping("/create-page")
-    public String getCreatePage(@ModelAttribute(name = "employee") EmployeeDTO employeeDTO) {
+    public String getCreatePage(@ModelAttribute(name = EMPLOYEE_ATTRIBUTE) CreateEmployeeRequest employeeDTO) {
         return "/employee/employee-create";
     }
 
     @PostMapping
-    public String createEmployee(@ModelAttribute(name = "employee") @Valid EmployeeDTO employeeDTO, BindingResult bindingResult) {
+    public String createEmployee(@ModelAttribute(name = EMPLOYEE_ATTRIBUTE) @Valid CreateEmployeeRequest employeeDTO, BindingResult bindingResult) {
         if(bindingResult.hasErrors()) {
             return "/employee/employee-create";
         }
