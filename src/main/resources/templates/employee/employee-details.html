@@ -3,12 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <title>Employee details</title>
+    <link rel="stylesheet" href="../static/css/style.css">
 </head>
 <body>
+<div th:insert="~{header.html}"></div>
+
     <div th:object="${employee}">
         <p th:text="${'Email: ' + employee.getEmail()}"></p>
         <p th:text="${'Name: ' + employee.getName()}"></p>
-        <p th:text="${'Balance: ' + employee.getPhone()}"></p>
+        <p th:text="${'Phone: ' + employee.getPhone()}"></p>
         <p th:text="${'Birthdate: ' + employee.getBirthDate()}"></p>
         <br>
         <form th:action="@{/employees/{email}(email=${employee.email})}" th:method="delete">

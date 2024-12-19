@@ -3,33 +3,31 @@
 <head>
     <meta charset="UTF-8">
     <title>Employee list</title>
+    <link rel="stylesheet" href="../static/css/style.css">
 </head>
 <body>
-    <table th:colspan="2" border="bold">
-        <tr>
-            <th>Name</th>
-            <th>Email</th>
-            <th>Phone</th>
-            <th>Birthdate</th>
-        </tr>
-        <tr th:each="employee:  ${employees.getContent()}">
-            <td th:text="${employee.getName()}"></td>
-            <td th:text="${employee.getEmail()}"></td>
-            <td th:text="${employee.getPhone()}"></td>
-            <td th:text="${employee.getBirthDate()}"></td>
+<div th:insert="~{header.html}"></div>
 
-            <td>
-                <form th:action="@{/employees/{email}(email=${employee.email})}" th:method="delete">
-                    <input type="submit" value="Delete">
-                </form>
-                <form th:action="@{/employees/{email}/edit-page(email=${employee.email})}" th:method="get">
-                    <input type="submit" value="Update">
-                </form>
-                <form th:action="@{/clients/{email}(email=${employee.email})}" th:method="get">
-                    <input type="submit" value="Read">
-                </form></td>
-            </td>
-        </tr>
-    </table>
+<table th:colspan="2" border="bold">
+    <tr>
+        <th>Name</th>
+        <th>Email</th>
+    </tr>
+    <tr th:each="employee:  ${employees.getContent()}">
+        <td th:text="${employee.getName()}"></td>
+        <td th:text="${employee.getEmail()}"></td>
+        <td>
+            <form th:action="@{/employees/{email}(email=${employee.email})}" th:method="delete">
+                <input type="submit" value="Delete">
+            </form>
+            <form th:action="@{/employees/{email}/edit-page(email=${employee.email})}" th:method="get">
+                <input type="submit" value="Update">
+            </form>
+            <form th:action="@{/employees/{email}(email=${employee.email})}" th:method="get">
+                <input type="submit" value="Read">
+            </form>
+        </td>
+    </tr>
+</table>
 </body>
 </html>
