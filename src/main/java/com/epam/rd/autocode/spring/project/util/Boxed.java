@@ -1,5 +1,6 @@
 package com.epam.rd.autocode.spring.project.util;
 
+import java.util.Optional;
 import java.util.function.BinaryOperator;
 import java.util.function.Consumer;
 import java.util.function.Function;
@@ -58,5 +59,20 @@ public class Boxed<T> {
         } else {
             consumer.accept(this.value);
         }
+    }
+
+    public void ifPresent(Consumer<T> consumer) {
+        if(consumer == null) {
+            throw  new IllegalArgumentException("No Error was supplied!");
+        } else if(value != null){
+            consumer.accept(this.value);
+        }
+    }
+
+    public <U> Boxed<U> flatOpt(Function<T, Optional<U>> mapper) {
+        if (mapper == null) {
+            throw new IllegalArgumentException("Function can't be null");
+        }
+        return Boxed.of(mapper.apply(this.value).orElse(null));
     }
 }
