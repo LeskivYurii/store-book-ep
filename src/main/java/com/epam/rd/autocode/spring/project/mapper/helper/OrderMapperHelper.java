@@ -1,8 +1,10 @@
 package com.epam.rd.autocode.spring.project.mapper.helper;
 
 import com.epam.rd.autocode.spring.project.dto.BookItemDTO;
+import com.epam.rd.autocode.spring.project.exception.NotEnoughBookQuantityException;
 import com.epam.rd.autocode.spring.project.exception.NotFoundException;
 import com.epam.rd.autocode.spring.project.mapper.BookItemMapper;
+import com.epam.rd.autocode.spring.project.model.Book;
 import com.epam.rd.autocode.spring.project.model.BookItem;
 import com.epam.rd.autocode.spring.project.model.Client;
 import com.epam.rd.autocode.spring.project.model.Employee;
@@ -28,7 +30,8 @@ public class OrderMapperHelper {
 
     @Named("toClient")
     public Client toClient(String email) {
-        return clientRepository.findClientByEmail(email);
+        return clientRepository.findClientByEmail(email)
+                .orElseThrow(() -> new NotFoundException("Client with %s email does't exist!".formatted(email)));
     }
 
     @Named("toEmployee")
@@ -54,22 +57,22 @@ public class OrderMapperHelper {
     public List<BookItemDTO> toBookItemsDto(List<BookItem> bookItems) {
         return bookItems
                 .stream()
-                .map(bookItem -> new BookItemDTO(bookItem.getBook().getName(), bookItem.getQuantity()))
+                .map(bookItem -> new BookItemDTO(bookItem.getBook().getId(), bookItem.getQuantity()))
                 .toList();
     }
 
     private BookItem toBookItem(BookItemDTO bookItemDTO) {
         return Boxed
                 .of(bookItemDTO)
-                .map(bookItemDTO1 -> bookRepository.findBookByName(bookItemDTO1.getBookName()))
-                //.filter(book -> validateBookQuantity(book, bookItemDTO))
+                .flatOpt(bookItemDTO1 -> bookRepository.findById(bookItemDTO1.getBookId()))
+                .doWith(book -> validateBookQuantity(book, bookItemDTO))
                 .map(book -> bookItemMapper.toBookItem(book, bookItemDTO))
-                .orElseThrow(() -> new NotFoundException("Book with %s name wasn't found!".formatted(bookItemDTO.getBookName())));
+                .orElseThrow(() -> new NotFoundException("Book with %s id wasn't found!".formatted(bookItemDTO.getBookId())));
     }
 
-   /* private void validateBookQuantity(Book book, BookItemDTO bookItemDTO){
+    private void validateBookQuantity(Book book, BookItemDTO bookItemDTO){
         if(book.getQuantity() < bookItemDTO.getQuantity()) {
-            throw new NotEnoughBookQuantityException("Book with '%s' name doesn't have enough quantity to order!");
+            throw new NotEnoughBookQuantityException("Book with '%s' id doesn't have enough quantity to order!");
         }
-    }*/
+    }
 }

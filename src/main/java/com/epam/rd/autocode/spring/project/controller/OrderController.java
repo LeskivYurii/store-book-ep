@@ -1,7 +1,7 @@
 package com.epam.rd.autocode.spring.project.controller;
 
 import com.epam.rd.autocode.spring.project.dto.BookItemDTO;
-import com.epam.rd.autocode.spring.project.dto.OrderDTO;
+import com.epam.rd.autocode.spring.project.dto.request.CreateOrderRequest;
 import com.epam.rd.autocode.spring.project.service.OrderService;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
@@ -35,7 +35,7 @@ public class OrderController {
     }
 
     @PostMapping("/orders")
-    public void createOrder(@ModelAttribute OrderDTO orderDTO, HttpSession httpSession, Model model) {
+    public void createOrder(@ModelAttribute CreateOrderRequest orderDTO, HttpSession httpSession, Model model) {
         orderDTO.setBookItems((List<BookItemDTO>) httpSession.getAttribute("items"));
         model.addAttribute("order", orderService.addOrder(orderDTO));
     }
