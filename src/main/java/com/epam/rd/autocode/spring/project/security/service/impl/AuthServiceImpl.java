@@ -39,4 +39,14 @@ public class AuthServiceImpl implements AuthService {
                 .orElseThrow(() -> new BadCredentialsException("Invalid username or password"));
     }
 
+    @Override
+    public Cookie logout() {
+        Cookie cookie = new Cookie(AUTH_COOKIE_NAME, "");
+        cookie.setMaxAge(0);
+        cookie.setPath("/");
+        cookie.setHttpOnly(true);
+
+        return cookie;
+    }
+
 }
