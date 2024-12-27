@@ -60,5 +60,6 @@ public class User {
     @Column(name = "updated_at", nullable = false)
     @UpdateTimestamp
     private OffsetDateTime updatedAt;
+    private String phone;
 
 }

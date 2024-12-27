@@ -51,4 +51,7 @@ public class UserDetailsAdapter implements UserDetails {
         return user.isActive();
     }
 
+    public User getUser() {
+        return user;
+    }
 }

@@ -4,6 +4,7 @@ import com.epam.rd.autocode.spring.project.dto.request.UpdateClientRequest;
 import com.epam.rd.autocode.spring.project.dto.request.UpdateEmployeeRequest;
 import com.epam.rd.autocode.spring.project.model.User;
 import com.epam.rd.autocode.spring.project.repo.UserRepository;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanWrapperImpl;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -34,10 +35,14 @@ public class UserOldPasswordValidation implements Validator {
                 .getPropertyValue("email");
 
         if(oldPassword != null && newPassword != null && !"".equals(oldPassword) && !"".equals(newPassword)) {
-            User user = userRepository.findUserByEmail((String) email);
+            User user = userRepository.findUserByEmail((String) email)
+                    .orElseThrow(() -> new EntityNotFoundException("User with %s username doesn't exist!"));
             if(passwordEncoder.matches((String) oldPassword, user.getPassword())) {
                 errors.rejectValue("oldPassword", "400", "Old password is wrong");
             }
+        }  else if(!"".equals(newPassword) && newPassword != null && ("".equals(oldPassword) || oldPassword == null)) {
+            errors.rejectValue("oldPassword", "400", "Enter old password to verify correctness!");
+
         }
     }
 }

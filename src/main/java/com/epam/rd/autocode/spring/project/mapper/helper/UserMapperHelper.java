@@ -13,6 +13,7 @@ public class UserMapperHelper {
 
     @Named("toEncodedPassword")
     public String toEncodedPassword(String password) {
+
         return passwordEncoder.encode(password);
     }
 
