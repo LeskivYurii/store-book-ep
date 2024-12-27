@@ -11,7 +11,8 @@ spring:
     password: password
   web:
     resources:
-      add-mappings: false
+      add-mappings: true
+      static-locations: classpath:/templates/static/
   jpa:
     hibernate:
       ddl-auto: validate
@@ -40,6 +41,11 @@ spring:
     hiddenmethod:
       filter:
         enabled: true
+  servlet:
+    multipart:
+      enabled: true
+      max-file-size: 5MB
+
 #logging:
 #  level:
 #    root: debug
