@@ -1,28 +1,41 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+
 <head>
     <meta charset="UTF-8">
     <title>Bookstore Header</title>
-    <link rel="stylesheet" type="text/css" th:ref="@{/static/css/style.css}">
+    <link rel="stylesheet" type="text/css" th:ref="@{/css/styles.css}">
 </head>
 <body>
 <header class="header">
     <div class="logo">
-        <img src="/templates/static/logo.png" alt="Bookstore Logo">
+        <img src="/img/logo.png" alt="Bookstore Logo">
     </div>
     <nav class="nav">
         <ul>
             <li><a href="#">Home</a></li>
-            <li><a href="#">Books</a></li>
-            <li><a href="#">New Arrivals</a></li>
-            <li><a href="#">Best Sellers</a></li>
-            <li><a href="#">Contact</a></li>
+            <li><a th:href="@{/books(sort='quantity,DESC')}">Books</a></li>
+            <li sec:authorize="hasRole('CLIENT')"><a th:href="@{/clients/{clientEmail}(clientEmail=${#authentication.getName()})}">Account Info</a></li>
+            <li sec:authorize="hasRole('CLIENT')"><a th:href="@{/clients/{clientEmail}/orders(clientEmail=${#authentication.getName()}, sort='createdAt,DESC')}">Orders</a></li>
+            <li sec:authorize="hasRole('EMPLOYEE')"><a th:href="@{/orders}">Orders</a></li>
+            <li sec:authorize="hasRole('EMPLOYEE')"><a th:href="@{/clients}">Clients</a></li>
+            <li sec:authorize="hasRole('EMPLOYEE')"><a th:href="@{/employees}">Employees</a></li>
+            <li sec:authorize="hasRole('EMPLOYEE')"><a th:href="@{/books/create-page}">Create book</a></li>
+            <li sec:authorize="hasRole('CLIENT')"><a th:href="@{/clients/{email}/cart(email=${#authentication.getName()})}">Cart</a></li>
         </ul>
     </nav>
-    <div class="search-bar">
-        <input type="text" placeholder="Search books...">
+    <form   sec:authorize="isAnonymous()" th:action="@{/auth/login-page}" th:method="GET">
+        <input class="custom-button" type="submit" th:value="Login">
+    </form>
+    <form sec:authorize="isAuthenticated()" th:action="@{/auth/logout}" th:method="POST">
+        <input type="submit"  class="custom-button" th:value="Logout">
+    </form>
+    <!--<div class="search-bar">
+        <label>
+            <input type="text" placeholder="Search books...">
+        </label>
         <button type="submit">Search</button>
-    </div>
+    </div>-->
 </header>
 </body>
 </html>
