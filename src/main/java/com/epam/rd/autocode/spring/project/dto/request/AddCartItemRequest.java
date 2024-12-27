@@ -16,8 +16,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class AddCartItemRequest {
 
-    @NotNull
-    @Min(1)
     private Long id;
     @NotNull
     @Min(1)
