@@ -6,6 +6,7 @@ import com.epam.rd.autocode.spring.project.validation.annotation.UniqueEmail;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
@@ -18,12 +19,17 @@ public class UniqueEmailValidator implements ConstraintValidator<UniqueEmail, St
 
     @Override
     public boolean isValid(String value, ConstraintValidatorContext context) {
-        if (!SecurityContextHolder.getContext().getAuthentication().getName().equals("anonymousUser")) {
-            return !((UserDetails) SecurityContextHolder.getContext().getAuthentication().getDetails())
-                    .getUsername().equals(value) && userRepository.existsByEmail(value);
-        } else {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if(authentication.getName().equals("anonymousUser") || value != null) {
             return !userRepository.existsByEmail(value);
+        } else if (((UserDetailsAdapter) authentication.getPrincipal()).getUser().getRole().equals("ROLE_EMPLOYEE")) {
+            return true;
+        } else  if (((UserDetailsAdapter) authentication.getPrincipal()).getUser().getRole().equals("ROLE_CLIENT")) {
+            return (SecurityContextHolder.getContext().getAuthentication().getName().equals(value) || !userRepository.existsByEmail(value));
+
         }
+
+        return true;
     }
 
 }
