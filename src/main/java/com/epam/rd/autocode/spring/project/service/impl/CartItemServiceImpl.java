@@ -1,7 +1,7 @@
 package com.epam.rd.autocode.spring.project.service.impl;
 
 import com.epam.rd.autocode.spring.project.dto.request.AddCartItemRequest;
-import com.epam.rd.autocode.spring.project.dto.request.GetBookItemRequest;
+import com.epam.rd.autocode.spring.project.dto.response.GetBookItemResponse;
 import com.epam.rd.autocode.spring.project.exception.NotFoundException;
 import com.epam.rd.autocode.spring.project.mapper.BookItemMapper;
 import com.epam.rd.autocode.spring.project.model.Book;
@@ -33,7 +33,7 @@ public class CartItemServiceImpl implements CartItemService {
                 .ifPresent(cartItemRepository::save);
     }
 
-    public List<GetBookItemRequest> findClientCart(String email) {
+    public List<GetBookItemResponse> findClientCart(String email) {
         return cartItemRepository.findAllByClientEmail(email).stream().map(bookItemMapper::toGetBookItemRequest).toList();
     }
 
