@@ -54,6 +54,7 @@ public class Book {
     private String characteristics;
     @Column(nullable = false)
     private String description;
+    private String image;
     @Column(nullable = false)
     @Enumerated(value = EnumType.STRING)
     private Language language;

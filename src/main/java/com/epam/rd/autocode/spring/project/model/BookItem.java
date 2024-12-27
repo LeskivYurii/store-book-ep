@@ -1,5 +1,6 @@
 package com.epam.rd.autocode.spring.project.model;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -25,7 +26,7 @@ public class BookItem {
     @ManyToOne
     @JoinColumn(name = "order_id")
     private Order order;
-    @ManyToOne
+    @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     @JoinColumn(name = "book_id")
     private Book book;
     @Column(nullable = false)

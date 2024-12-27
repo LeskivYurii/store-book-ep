@@ -17,7 +17,10 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 
 @Controller
 @RequiredArgsConstructor
@@ -46,7 +49,7 @@ public class BookController {
         return "redirect:/books";
     }
 
-    @GetMapping("/{id}/edit")
+    @GetMapping("/{id}/edit-page")
     public String getEditPage(@PathVariable Long id, Model model) {
         model.addAttribute("book", bookService.getBookById(id));
         model.addAttribute(AGE_GROUP_ATTRIBUTE, AgeGroup.values());
@@ -67,7 +70,9 @@ public class BookController {
     }
 
     @GetMapping("/create-page")
-    public String getCreatePage(@ModelAttribute(name = "book") ModifyBookRequest modifyBookRequest) {
+    public String getCreatePage(@ModelAttribute(name = "book") ModifyBookRequest modifyBookRequest, Model model) {
+        model.addAttribute(AGE_GROUP_ATTRIBUTE, AgeGroup.values());
+        model.addAttribute(LANGUAGES_ATTRIBUTE, Language.values());
         return "/book/book-create";
     }
 

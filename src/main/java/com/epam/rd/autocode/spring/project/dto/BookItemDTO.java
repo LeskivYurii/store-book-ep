@@ -16,4 +16,7 @@ public class BookItemDTO {
     @Min(value = 1, message = "Quantity of product can't be zero or less!")
     private Integer quantity;
 
+    public BookItemDTO create() {
+        return new BookItemDTO();
+    }
 }
