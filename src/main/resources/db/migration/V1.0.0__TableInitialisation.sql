@@ -29,6 +29,7 @@ CREATE TABLE IF NOT EXISTS BOOKS
     characteristics  varchar        not null,
     description      varchar        not null,
     language         varchar        not null,
+    image            varchar,
     created_at       timestamp with time zone,
     updated_at       timestamp with time zone,
 
@@ -40,7 +41,7 @@ CREATE TABLE IF NOT EXISTS ORDERS
 (
     id          bigint generated always as identity,
     client_id   bigint         not null,
-    employee_id bigint         not null,
+    employee_id bigint,
     status      varchar        not null,
     price       numeric(10, 2) not null,
     created_at  timestamp with time zone,
@@ -65,12 +66,12 @@ CREATE TABLE IF NOT EXISTS "BOOK_ITEMS"
 
 CREATE TABLE IF NOT EXISTS CART_ITEM
 (
-    id bigint generated always as identity,
+    id        bigint generated always as identity,
     client_id bigint not null,
-    book_id bigint not null,
-    quantity int not null,
+    book_id   bigint not null,
+    quantity  int    not null,
 
     constraint cart_item_pk primary key (id),
-    constraint user_cart_item_fk FOREIGN KEY (client_id) REFERENCES USERS(id),
-    constraint book_cart_item_fk FOREIGN KEY (book_id) REFERENCES BOOKS(id)
+    constraint user_cart_item_fk FOREIGN KEY (client_id) REFERENCES USERS (id),
+    constraint book_cart_item_fk FOREIGN KEY (book_id) REFERENCES BOOKS (id)
 )
