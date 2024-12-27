@@ -1,43 +1,61 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
     <title>Books</title>
-    <link rel="stylesheet" type="text/css" th:ref="@{/static/css/style.css}">
+    <link rel="stylesheet" type="text/css" href="/css/styles.css">
 </head>
 <body>
 <div th:replace="~{/header :: header}"></div>
-
-    <div>
-        <table th:colspan="2" border="bold">
-           <tr>
-               <th>Name</th>
-               <th>Genre</th>
-               <th>Age group</th>
-               <th>Price</th>
-               <th>Author</th>
-               <th>Language</th>
-               <th>Operation</th>
-           </tr>
-            <tr th:each="book:  ${books.getContent()}">
-                <td th:text="${book.getName()}"></td>
-                <td th:text="${book.getGenre()}"></td>
-                <td th:text="${book.getAgeGroup().name().substring(0,1) + book.getAgeGroup().name().substring(1).toLowerCase()}"></td>
-                <td th:text="${book.getPrice()}"></td>
-                <td th:text="${book.getAuthor()}"></td>
-                <td th:text="${book.getLanguage().name().substring(0,1) + book.getLanguage().name().substring(1).toLowerCase()}"></td>
-                <td>       <form th:action="@{/books/{id}(id=${book.id})}" th:method="delete">
-                    <input type="submit" value="Delete">
-                </form>
-                    <form th:action="@{/books/{id}/edit-page(id=${book.id})}" th:method="get">
-                        <input type="submit" value="Update">
-                    </form>
-                    <form th:action="@{/books/{id}(id=${book.id})}" th:method="get">
-                        <input type="submit" value="Read">
-                    </form></td>
-            </tr>
-        </table>
+<div class="catalog-body">
+    <div class="catalog-container">
+        <h1>Book Catalog</h1>
+        <div class="book-list">
+            <div class="book-card" th:each="book: ${books}">
+                <img th:if="${img} == null" src="/img/default_book_cover.jpg" alt="Book Cover">
+                <img th:if="${img} != null" th:src="${img}" alt="Book Cover">
+                <div class="book-info">
+                    <a th:href="@{/books/{id}(id=${book.getId()})}"><h2 class="book-name"
+                                                                        th:text="${book.getName()}"></h2></a>
+                    <strong>Genre: </strong>
+                    <p class="book-genre" th:text="${book.getGenre()}"></p>
+                    <strong>Status: </strong>
+                    <p class="book-status" th:text="${book.getQuantity()} > 0 ? 'In stock' : 'Out of stock'"></p>
+                    <strong>Price: </strong>
+                    <p class="book-price" th:text="${book.getPrice() + ' grn'}"></p>
+                    <strong>Language: </strong>
+                    <p class="book-language"
+                       th:text="${book.getLanguage().name().substring(0,1) + book.getLanguage().name().substring(1).toLowerCase()}"></p>
+                    <div class="book-actions" sec:authorize="hasRole('CLIENT')" th:if="${book.getQuantity()}  > 0">
+                        <form th:action="@{/clients/{email}/cart(email=${#authentication.getName()})}" th:method="POST">
+                            <input type="number" id="amount-1" min="1" value="1" th:name="quantity"
+                                   th:max="${book.getQuantity()}">
+                            <input type="hidden" th:name="bookId" th:value="${book.getId()}">
+                            <input type="hidden" th:name="clientEmail" th:value="${#authentication.getName()}">
+                            <input type="submit" value="Add to Cart" class="custom-button"></input>
+                        </form>
+                    </div>
+                    <div class="button-group" sec:authorize="hasRole('EMPLOYEE')">
+                        <form th:action="@{/books/{id}/edit-page(id=${book.getId()})}" th:method="get">
+                            <input type="submit" value="Edit" class="custom-button">
+                        </form>
+                        <form th:action="@{/books/{id}/edit-page(id=${book.getId()})}" th:method="delete">
+                            <input type="submit" value="Delete" class="custom-button">
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div th:if="${books.totalPages > 0}" class="pagination"
+             th:each="pageNumber : ${#numbers.sequence(0,books.getTotalPages() - 1, 1)}">
+            <a th:href="@{/books(size=${books.size}, page=${pageNumber})}"
+               th:text="${pageNumber + 1}"
+               th:class="${pageNumber==books.number} ? active" class="pagination"></a>
+        </div>
     </div>
+
+</div>
 
 </body>
 </html>

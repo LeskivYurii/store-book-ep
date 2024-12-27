@@ -1,29 +1,90 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
-    <title>Book</title>
-    <link rel="stylesheet" href="../static/css/style.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Book Details</title>
+    <link rel="stylesheet" type="text/css" href="/css/styles.css">
 </head>
 <body>
 <div th:insert="~{header.html}"></div>
-    <div th:object="${book}">
-        <p th:text="${'Name: ' + book.getName()}"></p>
-        <p th:text="${'Genre: ' + book.getGenre()}"></p>
-        <p th:text="${'Age group: ' + book.getAgeGroup().name().substring(0,1) + book.getAgeGroup().name().substring(1).toLowerCase()}"></p>
-        <p th:text="${'Price: ' + book.getPrice()}"></p>
-        <p th:text="${'Publication date: ' + book.getPublicationDate()}"></p>
-        <p th:text="${'Author: ' + book.getAuthor()}"></p>
-        <p th:text="${'Pages: ' + book.getPrice()}"></p>
-        <p th:text="${'Characteristics: ' + book.getCharacteristics()}"></p>
-        <p th:text="${'Description: ' + book.getDescription()}"></p>
-        <p th:text="${'Language: ' + book.getLanguage().name().substring(0,1) + book.getLanguage().name().substring(1).toLowerCase()}"></p>
+<div class="book-body">
+    <div class="book-details-container">
+        <h1>Book Details</h1>
+        <div class="book-cover">
+            <img id="book-cover-img" src="/img/default_book_cover.jpg" alt="Book Cover">
+        </div>
+        <div sec:authorize="hasRole('EMPLOYEE')" class="button-group">
+            <form th:action="@{/books/{id}(id=${book.getId()})}" th:method="delete">
+                <input type="submit" class="custom-button" value="Delete">
+            </form>
+            <form th:action="@{/books/{id}/edit-page(id=${book.getId()})}" th:method="get">
+                <input type="submit" class="custom-button" value="Edit">
+            </form>
+        </div>
+        <div class="book-details">
+            <div class="book-detail" sec:authorize="hasRole('EMPLOYEE')">
+                <strong>ID:</strong>
+                <span id="book-id" th:text="${book.getId()}"></span>
+            </div>
+            <div class="book-detail">
+                <strong>Name:</strong>
+                <span id="book-name" th:text="${book.getName()}"></span>
+            </div>
+            <div class="book-detail">
+                <strong>Genre:</strong>
+                <span id="book-genre" th:text="${book.getGenre()}"></span>
+            </div>
+            <div class="book-detail">
+                <strong>Age Group:</strong>
+                <span id="book-age-group"
+                      th:text="${book.getAgeGroup().name().substring(0,1) + book.getAgeGroup().name().substring(1).toLowerCase()}"></span>
+            </div>
+            <div class="book-detail">
+                <strong>Price:</strong>
+                <span id="book-price" th:text="${book.getPrice() + ' grn.'}"></span>
+            </div>
+            <div class="book-detail">
+                <strong>Publication Date:</strong>
+                <span id="book-publication-date" th:text="${book.getPublicationDate()}"></span>
+            </div>
+            <div class="book-detail">
+                <strong>Author:</strong>
+                <span id="book-author" th:text="${book.getAuthor()}"></span>
+            </div>
+            <div class="book-detail">
+                <strong>Pages:</strong>
+                <span id="book-pages" th:text="${book.getPages()}"></span>
+            </div>
+            <div class="book-detail" sec:authorize="hasRole('EMPLOYEE')">
+                <strong>Quantity:</strong>
+                <span id="book-quantity" th:text="${book.getQuantity()}"></span>
+            </div>
+            <div class="book-detail">
+                <strong>Characteristics:</strong>
+                <span id="book-characteristics" th:text="${book.getCharacteristics()}"></span>
+            </div>
+            <div class="book-detail">
+                <strong>Description:</strong>
+                <span id="book-description" th:text="${book.getDescription()}">
+
+                </span>
+            </div>
+            <div class="book-detail">
+                <strong>Language:</strong>
+                <span id="book-language"
+                      th:text="${book.getLanguage().name().substring(0,1) + book.getLanguage().name().substring(1).toLowerCase()}"></span>
+            </div>
+            <div class="book-detail" sec:authorize="hasRole('EMPLOYEE')">
+                <strong>Created At:</strong>
+                <span id="book-created-at" th:text="${book.getCreatedAt()}"></span>
+            </div>
+            <div class="book-detail" sec:authorize="hasRole('EMPLOYEE')">
+                <strong>Updated At:</strong>
+                <span id="book-updated-at" th:text="${book.getUpdatedAt()}"></span>
+            </div>
+        </div>
     </div>
-    <form th:action="@{/books/{name}(name=${book.name})}" th:method="delete">
-        <input type="submit" value="Delete">
-    </form>
-    <form th:action="@{/books/{name}/edit(name=${book.name})}" th:method="get">
-        <input type="submit" value="Update">
-    </form>
+</div>
 </body>
 </html>
