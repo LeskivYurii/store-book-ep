@@ -22,9 +22,10 @@ public class Boxed<T> {
     public <E> Boxed<E> map(Function<T, E> mapper) {
         if (mapper == null) {
             throw new IllegalArgumentException("Function can't be null");
+        } else if(this.value != null) {
+            return new Boxed<>(mapper.apply(this.value));
         }
-
-        return new Boxed<>(mapper.apply(this.value));
+        return null;
     }
 
     public Boxed<T> filter(Predicate<T> criteria) {
