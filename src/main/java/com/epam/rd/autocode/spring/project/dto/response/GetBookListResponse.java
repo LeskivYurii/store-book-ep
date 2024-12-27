@@ -7,7 +7,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
 
 @Data
 @AllArgsConstructor
@@ -20,6 +19,8 @@ public class GetBookListResponse {
     private AgeGroup ageGroup;
     private BigDecimal price;
     private String author;
+    private String quantity;
     private Language language;
+    private String image;
 
 }

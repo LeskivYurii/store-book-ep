@@ -10,6 +10,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -19,6 +20,9 @@ import java.time.LocalDate;
 @NoArgsConstructor
 public class ModifyBookRequest {
 
+    @NotNull
+    @Min(1)
+    private Long id;
     @NotBlank(message = "Name of the book can't be empty or null!")
     private String name;
     @NotBlank(message = "Genre of the book can't be empty or null!")
@@ -45,5 +49,6 @@ public class ModifyBookRequest {
     private String description;
     @NotNull(message = "Language of the book can't be null!")
     private Language language;
+    private MultipartFile bookImage;
 
 }
