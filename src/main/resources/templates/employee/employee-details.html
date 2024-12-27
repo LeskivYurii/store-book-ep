@@ -1,25 +1,40 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:sec="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
     <title>Employee details</title>
-    <link rel="stylesheet" href="../static/css/style.css">
+    <link rel="stylesheet" type="text/css" href="/css/styles.css">
 </head>
 <body>
 <div th:insert="~{header.html}"></div>
-
-    <div th:object="${employee}">
-        <p th:text="${'Email: ' + employee.getEmail()}"></p>
-        <p th:text="${'Name: ' + employee.getName()}"></p>
-        <p th:text="${'Phone: ' + employee.getPhone()}"></p>
-        <p th:text="${'Birthdate: ' + employee.getBirthDate()}"></p>
-        <br>
-        <form th:action="@{/employees/{email}(email=${employee.email})}" th:method="delete">
-            <input type="submit" value="Delete">
-        </form>
-        <form th:action="@{/employees/{email}/edit(email=${employee.email})}" th:method="get">
-            <input type="submit" value="Update">
-        </form>
+<div class="employee-body">
+    <div class="form-container">
+        <h2>Employee Details</h2>
+        <div class="form-group">
+            <label for="name">Name: </label>
+            <input disabled id="name" type="text" th:value="${employee.getName()}">
+        </div>
+        <div class="form-group">
+            <label for="email">Email: </label>
+            <input disabled id="email" type="email" th:value="${employee.getEmail()}">
+        </div>
+        <div class="form-group">
+            <label for="phone">Phone: </label>
+            <input disabled id="phone" type="text" th:value="${employee.getPhone()}">
+        </div>
+        <div class="form-group">
+            <label for="birthDate">Birthdate: </label>
+            <input disabled id="birthDate" type="date" th:value="${employee.getBirthDate()}">
+        </div>
+        <div class="button-group">
+            <form th:action="@{/employees/{email}(email=${employee.getEmail()})}" th:method="delete">
+                <input type="submit" value="Delete" class="custom-button">
+            </form>
+            <form th:action="@{/employees/{email}/edit-page(email=${employee.getEmail()})}" th:method="get">
+                <input type="submit" value="Update" class="custom-button">
+            </form>
+        </div>
     </div>
+</div>
 </body>
 </html>

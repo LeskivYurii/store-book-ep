@@ -1,33 +1,45 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:sec="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
     <title>Employee list</title>
-    <link rel="stylesheet" href="../static/css/style.css">
+    <link rel="stylesheet" type="text/css" href="/css/styles.css">
 </head>
 <body>
 <div th:insert="~{header.html}"></div>
-
-<table th:colspan="2" border="bold">
+<div class="container">
+<table>
+    <thead>
     <tr>
         <th>Name</th>
         <th>Email</th>
+        <th sec:authorize="hasRole('EMPLOYEE')">Operation</th>
     </tr>
+    </thead>
+    <tbody>
     <tr th:each="employee:  ${employees.getContent()}">
         <td th:text="${employee.getName()}"></td>
         <td th:text="${employee.getEmail()}"></td>
-        <td>
+        <td class="button-group" sec:authorize="hasRole('EMPLOYEE')">
             <form th:action="@{/employees/{email}(email=${employee.email})}" th:method="delete">
-                <input type="submit" value="Delete">
+                <input type="submit" value="Delete" class="custom-button">
             </form>
             <form th:action="@{/employees/{email}/edit-page(email=${employee.email})}" th:method="get">
-                <input type="submit" value="Update">
+                <input type="submit" value="Update" class="custom-button">
             </form>
             <form th:action="@{/employees/{email}(email=${employee.email})}" th:method="get">
-                <input type="submit" value="Read">
+                <input type="submit" value="Read" class="custom-button">
             </form>
         </td>
     </tr>
+    </tbody>
 </table>
+    <div th:if="${employees.totalPages > 0}" class="pagination"
+         th:each="pageNumber : ${#numbers.sequence(0,employees.getTotalPages() - 1, 1)}">
+        <a th:href="@{/employees(size=${employees.size}, page=${pageNumber})}"
+           th:text="${pageNumber + 1}"
+           th:class="${pageNumber==employees.number} ? active" class="pagination"></a>
+    </div>
+</div>
 </body>
 </html>
