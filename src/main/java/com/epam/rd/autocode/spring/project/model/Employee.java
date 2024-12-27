@@ -35,7 +35,6 @@ import java.time.OffsetDateTime;
 @EntityListeners(AuditingEntityListener.class)
 public class Employee extends User {
 
-    private String phone;
     @Column(name = "birth_date", nullable = false)
     private LocalDate birthDate;
 

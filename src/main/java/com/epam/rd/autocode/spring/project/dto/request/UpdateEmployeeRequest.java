@@ -11,6 +11,7 @@ import jakarta.validation.constraints.Past;
 import jakarta.validation.constraints.Pattern;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -26,12 +27,15 @@ public class UpdateEmployeeRequest {
     @NotBlank(message = "Email can't be empty!")
     @UniqueEmail
     private String email;
+    @EqualsAndHashCode.Exclude
     @Pattern(regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d).{6,}$|^$",
             message = "Password must contain at least one number, lower case and upper case letters and be 6 symbols long!")
     private String password;
+    @EqualsAndHashCode.Exclude
     @Pattern(regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d).{6,}$|^$",
             message = "Password must contain at least one number, lower case and upper case letters and be 6 symbols long!")
     private String confirmationPassword;
+    @EqualsAndHashCode.Exclude
     @Pattern(regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d).{6,}$|^$",
             message = "Password must contain at least one number, lower case and upper case letters and be 6 symbols long!")
     private String oldPassword;

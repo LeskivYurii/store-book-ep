@@ -33,7 +33,7 @@ public class EmployeeServiceImpl implements EmployeeService {
     public GetEmployeeDetailsResponse getEmployeeByEmail(String email) {
         return Boxed
                 .of(email)
-                .map(employeeRepository::findEmployeeByEmail)
+                .flatOpt(employeeRepository::findEmployeeByEmail)
                 .map(employeeMapper::toGetEmployeeDetailsResponse)
                 .orElseThrow(() -> new NotFoundException(EMPLOYEE_NOT_FOUND_ERROR_MESSAGE.formatted(email)));
     }
@@ -42,7 +42,7 @@ public class EmployeeServiceImpl implements EmployeeService {
     public GetEmployeeDetailsResponse updateEmployeeByEmail(String email, UpdateEmployeeRequest employeeDto) {
         return Boxed
                 .of(email)
-                .map(employeeRepository::findEmployeeByEmail)
+                .flatOpt(employeeRepository::findEmployeeByEmail)
                 .doWith(employee1 -> employeeMapper.updateEmployee(employee1, employeeDto))
                 .map(employeeRepository::save)
                 .map(employeeMapper::toGetEmployeeDetailsResponse)
@@ -53,7 +53,7 @@ public class EmployeeServiceImpl implements EmployeeService {
     public void deleteEmployeeByEmail(String email) {
         Boxed
                 .of(email)
-                .map(employeeRepository::findEmployeeByEmail)
+                .flatOpt(employeeRepository::findEmployeeByEmail)
                 .ifPresentOrElseThrow(employeeRepository::delete,
                         () -> new NotFoundException(EMPLOYEE_NOT_FOUND_ERROR_MESSAGE.formatted(email)));
     }

@@ -2,12 +2,16 @@ package com.epam.rd.autocode.spring.project.controller;
 
 import com.epam.rd.autocode.spring.project.dto.request.CreateEmployeeRequest;
 import com.epam.rd.autocode.spring.project.dto.request.UpdateEmployeeRequest;
+import com.epam.rd.autocode.spring.project.security.UserDetailsAdapter;
+import com.epam.rd.autocode.spring.project.security.service.AuthService;
 import com.epam.rd.autocode.spring.project.service.EmployeeService;
 import com.epam.rd.autocode.spring.project.validation.validator.UserOldPasswordValidation;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -28,6 +32,7 @@ public class EmployeeController {
 
     private final EmployeeService employeeService;
     private final UserOldPasswordValidation userOldPasswordValidation;
+    private final AuthService authService;
 
     @GetMapping
     public String getAllEmployee(@PageableDefault Pageable pageable, Model model) {
@@ -69,13 +74,16 @@ public class EmployeeController {
             return "/employee/employee-create";
         }
         employeeService.addEmployee(employeeDTO);
-        return "redirect:/employee/" +  employeeDTO.getEmail();
+        return "redirect:/auth/login-page";
     }
 
     @DeleteMapping("/{email}")
-    public String deleteEmployeeByEmail(@PathVariable String email) {
+    public String deleteEmployeeByEmail(@AuthenticationPrincipal UserDetailsAdapter userDetailsAdapter, @PathVariable String email, HttpServletResponse httpResponse) {
         employeeService.deleteEmployeeByEmail(email);
-        return "redirect:/employees";
+        if(userDetailsAdapter.getUsername().equals(email)) {
+            httpResponse.addCookie(authService.logout());
+        }
+        return "redirect:/auth/login-page";
     }
 
 }
