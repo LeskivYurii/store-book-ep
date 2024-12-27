@@ -1,24 +1,40 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
     <title>Client details</title>
-    <link rel="stylesheet" href="../static/css/style.css">
+    <link rel="stylesheet" type="text/css" href="/css/styles.css">
 </head>
 <body>
 <div th:insert="~{header.html}"></div>
-
-<div th:object="${client}">
-    <p th:text="${'Email: ' + client.getEmail()}"></p>
-    <p th:text="${'Name: ' + client.getName()}"></p>
-    <p th:text="${'Balance: ' + client.getBalance()}"></p>
-   <br>
-    <form th:action="@{/clients/{email}(email=${client.name})}" th:method="delete">
-        <input type="submit" value="Delete">
-    </form>
-    <form th:action="@{/clients/{email}/edit-page(email=${client.email})}" th:method="get">
-        <input type="submit" value="Update">
-    </form>
+<div class="client-body">
+    <div class="form-container">
+        <h2>Client Details</h2>
+        <div class="form-group">
+            <label for="name">Name: </label>
+            <input disabled id="name" type="text" th:value="${client.getName()}">
+        </div>
+        <div class="form-group">
+            <label for="email">Email: </label>
+            <input disabled id="email" type="email" th:value="${client.getEmail()}">
+        </div>
+        <div class="form-group">
+            <label for="phone">Phone: </label>
+            <input disabled id="phone" type="text" th:value="${client.getPhone()}">
+        </div>
+        <div class="form-group" sec:authorize="hasRole('CLIENT')">
+            <label for="balance">Balance: </label>
+            <input disabled id="balance" type="number" th:value="${client.getBalance()}">
+        </div>
+        <div class="button-group">
+            <form th:action="@{/clients/{email}(email=${client.getEmail()})}" th:method="delete">
+                <input type="submit" value="Delete" class="custom-button">
+            </form>
+            <form th:action="@{/clients/{email}/edit-page(email=${client.getEmail()})}" th:method="get">
+                <input type="submit" value="Update" class="custom-button">
+            </form>
+        </div>
+    </div>
 </div>
 </body>
 </html>

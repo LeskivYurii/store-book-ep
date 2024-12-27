@@ -1,32 +1,53 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
     <title>Client list</title>
-    <link rel="stylesheet" href="../static/css/style.css">
+    <link rel="stylesheet" type="text/css" href="/css/styles.css">
 </head>
 <body>
 <div th:insert="~{header.html}"></div>
-
-<table th:colspan="2" border="bold">
+<h1>Clients</h1>
+<table class="container">
+    <thead>
     <tr>
         <th>Name</th>
         <th>Email</th>
+        <th>Account</th>
+        <th>Operations</th>
     </tr>
-    <tr th:each="client:  ${clients.getContent()}">
-        <td th:text="${client.getName()}"></td>
-        <td th:text="${client.getEmail()}"></td>
+    </thead>
+    <tbody>
+        <tr th:each="client:  ${clients.getContent()}">
+            <td th:text="${client.getName()}"></td>
+            <td th:text="${client.getEmail()}"></td>
+            <td th:text="${client.isActive() ? 'Active' : 'Blocked'}"></td>
 
-        <td>       <form th:action="@{/clients/{email}(email=${client.email})}" th:method="delete">
-            <input type="submit" value="Delete">
-        </form>
-            <form th:action="@{/clients/{email}/edit-page(email=${client.email})}" th:method="get">
-                <input type="submit" value="Update">
-            </form>
-            <form th:action="@{/clients/{email}(email=${client.email})}" th:method="get">
-                <input type="submit" value="Read">
-            </form></td>
-    </tr>
+            <td class="button-group">
+                <form th:action="@{/clients/{email}(email=${client.getEmail()})}" th:method="delete">
+                    <input type="submit" value="Delete" class="custom-button">
+                </form>
+                <form th:action="@{/clients/{email}/edit-page(email=${client.getEmail()})}" th:method="get">
+                    <input type="submit" value="Update" class="custom-button">
+                </form>
+                <form th:action="@{/clients/{email}(email=${client.getEmail()})}" th:method="get">
+                    <input type="submit" value="Read" class="custom-button">
+                </form>
+                <form th:action="@{/clients/{email}/orders(email=${client.getEmail()})}" th:method="get">
+                    <input type="submit" value="Orders" class="custom-button">
+                </form>
+                <form th:action="@{/clients/{email}(email=${client.getEmail()})}" th:method="patch">
+                    <input type="submit" th:value="${client.isActive() ? 'Block' : 'Unblock'}" class="custom-button">
+                </form>
+            </td>
+        </tr>
+    </tbody>
 </table>
+<div th:if="${clients.totalPages > 0}" class="pagination"
+     th:each="pageNumber : ${#numbers.sequence(0,clients.getTotalPages() - 1, 1)}">
+    <a th:href="@{/clients(size=${clients.size}, page=${pageNumber})}"
+       th:text="${pageNumber + 1}"
+       th:class="${pageNumber==clients.number} ? active" class="pagination"></a>
+</div>
 </body>
 </html>
