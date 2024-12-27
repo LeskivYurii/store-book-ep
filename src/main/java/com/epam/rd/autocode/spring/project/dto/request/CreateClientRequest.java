@@ -7,6 +7,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
@@ -20,10 +21,12 @@ public class CreateClientRequest {
     @Email(message = "It's not email!")
     @NotBlank(message = "Email can't be empty!")
     private String email;
+    @EqualsAndHashCode.Exclude
     @NotBlank(message = "Password can't be empty or null!")
     @Pattern(regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d).{6,}$",
             message = "Password must contain at least one number, lower case and upper case letters and be 6 symbols long!")
     private String password;
+    @EqualsAndHashCode.Exclude
     @Pattern(regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d).{6,}$",
             message = "Password must contain at least one number, lower case and upper case letters and be 6 symbols long!")
     private String confirmationPassword;
@@ -31,6 +34,7 @@ public class CreateClientRequest {
     private String name;
     @DecimalMin(value = "0.0", inclusive = false, message = "Balance can't be zero or less!")
     private BigDecimal balance;
-
+    @NotBlank(message = "Name can't be empty or null!")
+    private String phone;
 
 }

@@ -18,4 +18,6 @@ public interface ClientService {
     void deleteClientByEmail(String email);
 
     GetClientDetailsResponse addClient(CreateClientRequest client);
+
+    void blockUnblockClient(String email);
 }

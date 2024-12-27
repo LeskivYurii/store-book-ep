@@ -2,22 +2,29 @@ package com.epam.rd.autocode.spring.project.controller;
 
 import com.epam.rd.autocode.spring.project.dto.request.CreateClientRequest;
 import com.epam.rd.autocode.spring.project.dto.request.UpdateClientRequest;
+import com.epam.rd.autocode.spring.project.security.UserDetailsAdapter;
+import com.epam.rd.autocode.spring.project.security.service.AuthService;
 import com.epam.rd.autocode.spring.project.service.ClientService;
 import com.epam.rd.autocode.spring.project.validation.validator.UserOldPasswordValidation;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+
+import java.net.http.HttpResponse;
 
 @Controller
 @RequiredArgsConstructor
@@ -27,6 +34,7 @@ public class ClientController {
     private static final String CLIENT_ATTRIBUTE = "client";
 
     private final ClientService clientService;
+    private final AuthService authService;
     private final UserOldPasswordValidation userOldPasswordValidation;
 
     @GetMapping
@@ -73,8 +81,18 @@ public class ClientController {
     }
 
     @DeleteMapping("/{email}")
-    public String deleteClientByEmail(@PathVariable String email) {
+    public String deleteClientByEmail(@AuthenticationPrincipal UserDetailsAdapter userDetailsAdapter, @PathVariable String email, HttpServletResponse httpResponse) {
         clientService.deleteClientByEmail(email);
+        if(userDetailsAdapter.getUsername().equals(email)) {
+            httpResponse.addCookie(authService.logout());
+        }
+        return "redirect:/clients";
+    }
+
+    @PatchMapping("/{email}")
+    public String blockUnblockClient(@PathVariable String email) {
+        clientService.blockUnblockClient(email);
+
         return "redirect:/clients";
     }
 

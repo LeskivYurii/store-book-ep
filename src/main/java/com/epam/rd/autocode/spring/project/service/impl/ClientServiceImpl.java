@@ -7,9 +7,11 @@ import com.epam.rd.autocode.spring.project.dto.response.GetClientListResponse;
 import com.epam.rd.autocode.spring.project.exception.AlreadyExistException;
 import com.epam.rd.autocode.spring.project.exception.NotFoundException;
 import com.epam.rd.autocode.spring.project.mapper.ClientMapper;
+import com.epam.rd.autocode.spring.project.model.Client;
 import com.epam.rd.autocode.spring.project.repo.ClientRepository;
 import com.epam.rd.autocode.spring.project.service.ClientService;
 import com.epam.rd.autocode.spring.project.util.Boxed;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -67,6 +69,15 @@ public class ClientServiceImpl implements ClientService {
                 .map(clientRepository::save)
                 .map(clientMapper::toGetClientDetailsResponse)
                 .orElseThrow(() -> new AlreadyExistException("Client with %s email already exist!".formatted(client.getEmail())));
+    }
+
+    @Override
+    public void blockUnblockClient(String email) {
+        Boxed
+                .of(email)
+                .flatOpt(clientRepository::findClientByEmail)
+                .doWith(client -> client.setActive(!client.isActive()))
+                .ifPresentOrElseThrow(clientRepository::save, () -> new EntityNotFoundException(CLIENT_NOT_FOUND_ERROR_MESSAGE.formatted(email)));
     }
 
 }
