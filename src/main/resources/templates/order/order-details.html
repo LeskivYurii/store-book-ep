@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Order Details</title>
+    <link rel="stylesheet" type="text/css" href="/css/styles.css">
+
+</head>
+<body>
+<div th:insert="~{header.html}"></div>
+<div class="container">
+    <h1>Order Details</h1>
+    <div class="order-info">
+        <div><span>Order #:</span><span th:text="${order.getId()}"></span></div>
+        <div><span>Status:</span><span th:text="${order.getStatus().name().substring(0,1) + order.getStatus().name().substring(1).toLowerCase()}"></span> </div>
+        <div><span>Created At: </span><span th:text="${order.getCreatedAt()}"></span></div>
+        <div><span>Reviewed by employee: </span> <span th:text="${order.getEmployeeEmail()}"></span></div>
+        <div sec:authorize="hasRole('EMPLOYEE')"><span>Client Email:</span> <span th:text="${order.getClientEmail()}"></span></div>
+        <div><span>Total Price: </span><span th:text="${order.getTotalPrice() + ' grn'}"></span></div>
+    </div>
+    <div class="book-items">
+        <h2>Book Items</h2>
+        <table>
+            <thead>
+            <tr>
+                <th>Book #</th>
+                <th>Book Name</th>
+                <th>Image</th>
+                <th>Quantity</th>
+                <th>Price</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="item: ${order.getBookItems()}">
+                <td th:text="${item.getBookId()}"></td>
+                <td><a th:href="@{/books/{id}(id=${item.getBookId()})}"><div th:text="${item.getBookName()}"></div></a></td>
+                <td th:if="${img == null}"><img src="/img/default_book_cover.jpg" alt="Java Programming" class="book-img"></td>
+                <td th:if="${img != null}"></td>
+                <td th:text="${item.getQuantity()}"></td>
+                <td th:text="${item.getPrice() + ' grn'}"></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+</body>
+</html>

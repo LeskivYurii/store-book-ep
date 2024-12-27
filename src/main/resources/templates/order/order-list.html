@@ -1,12 +1,69 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
-    <link rel="stylesheet" href="../static/css/style.css">
+    <title>Orders</title>
+    <link rel="stylesheet" type="text/css" href="/css/styles.css">
 </head>
 <body>
 <div th:insert="~{header.html}"></div>
+<div class="container">
+    <h1>Orders List</h1>
+    <h1 th:if="${orders.isEmpty()}">is Empty</h1>
+    <table th:if="${!orders.isEmpty()}">
+        <thead>
+        <tr>
+            <th>#</th>
+            <th>Created At</th>
+            <th sec:authorize="hasRole('EMPLOYEE')">Customer Email</th>
+            <th>Reviewed by Employee</th>
+            <th>Total Price</th>
+            <th>Status</th>
+            <th sec:authorize="isAuthenticated()">Operation</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="order: ${orders}">
 
+            <td th:text="${order.getId()}"></td>
+            <td th:text="${order.getCreatedAt()}"></td>
+            <td sec:authorize="hasRole('EMPLOYEE')" th:text="${order.getEmployeeEmail()}"></td>
+            <td th:if="${order.getEmployeeEmail() != null}" th:text="${order.getEmployeeEmail()}"></td>
+            <td th:if="${order.getEmployeeEmail() == null}">Wasn't reviewed yet</td>
+            <td th:text="${order.getTotalPrice() + ' grn'}"></td>
+            <td sec:authorize="hasRole('CLIENT')"
+                th:text="${order.getStatus().name().substring(0,1) + order.getStatus().name().substring(1).toLowerCase()}"
+                class="status"></td>
+            <form th:action="@{/orders/{id}(id=${order.getId()})}" th:method="PATCH">
+                <td sec:authorize="hasRole('EMPLOYEE')">
+
+                    <div class="label-select-container">
+                        <select id="ageGroup" name="status">
+                            <option th:each="status: ${statuses}"
+                                    th:text="${status.name().substring(0,1) + status.name().substring(1).toLowerCase()}"
+                                    class="status"
+                                    th:value="${status}" th:if="${!status.equals(order.getStatus())}"></option>
+                        </select>
+                    </div>
+
+                </td>
+                <td>
+                    <input sec:authorize="hasRole('EMPLOYEE')" type="submit" value="Edit" class="custom-button">
+                    <a sec:authorize="isAuthenticated()" th:href="@{/orders/{id}(id=${order.getId()})}" class="custom-button">Read</a>
+                </td>
+
+            </form>
+
+        </tr>
+        </tbody>
+    </table>
+    </table>
+    <div th:if="${orders.totalPages > 0}" class="pagination"
+         th:each="pageNumber : ${#numbers.sequence(0,orders.getTotalPages() - 1, 1)}">
+        <a th:href="@{/employees(size=${orders.size}, page=${pageNumber})}"
+           th:text="${pageNumber + 1}"
+           th:class="${pageNumber==orders.number} ? active" class="pagination"></a>
+    </div>
+</div>
 </body>
 </html>
