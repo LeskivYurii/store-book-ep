@@ -341,7 +341,7 @@ a {
 /* Book List Styling */
 .book-list {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    grid-template-columns: repeat(4, minmax(250px, 1fr));
     gap: 20px;
 }
 
@@ -409,11 +409,6 @@ a {
 }
 
 /* Book List Styling */
-.book-list {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 20px;
-}
 
 /* Book Card Styling */
 .book-card {
@@ -434,7 +429,6 @@ a {
 /* Book Cover Image */
 .book-card img {
     width: 100%;
-    height: auto;
     border-bottom: 1px solid #ddd;
 }
 
@@ -760,11 +754,6 @@ th, td {
 
 tr:hover {
     background-color: #f1f1f1;
-}
-.book-img {
-    width: 50px;
-    height: auto;
-    border-radius: 4px;
 }
 
 .pagination {
