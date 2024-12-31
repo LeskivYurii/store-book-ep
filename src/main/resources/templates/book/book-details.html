@@ -12,7 +12,8 @@
     <div class="book-details-container">
         <h1>Book Details</h1>
         <div class="book-cover">
-            <img id="book-cover-img" src="/img/default_book_cover.jpg" alt="Book Cover">
+            <img th:if="${book.image} == null" src="/img/default_book_cover.jpg" alt="Book Cover">
+            <img th:if="${book.image} != null" th:src="${book.getImage()}" alt="Book Cover">
         </div>
         <div sec:authorize="hasRole('EMPLOYEE')" class="button-group">
             <form th:action="@{/books/{id}(id=${book.getId()})}" th:method="delete">

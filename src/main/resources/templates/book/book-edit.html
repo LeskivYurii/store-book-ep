@@ -9,7 +9,7 @@
 <div th:insert="~{header.html}"></div>
 <div class="book-body">
     <div class="book-details-container" th:object="${book}">
-        <form th:action="@{/books/{id}(id=${book.id})}" th:method="PUT">
+        <form th:action="@{/books/{id}(id=${book.id})}" th:method="PUT" enctype="multipart/form-data">
             <input type="hidden" th:field="*{id}">
             <h1>Edit Book</h1>
             <div class="book-detail">
@@ -82,6 +82,10 @@
                             th:text="${language.name().substring(0,1) + language.name().substring(1).toLowerCase()}"
                             th:value="${language}" th:selected="${language.equals(book.ageGroup)}"></option>
                 </select>
+            </div>
+            <div class="book-detail">
+                <label for="img">Image: </label>
+                <input id="img" type="file" th:field="*{image}" class="form-control-file">
             </div>
             <input class="custom-button" type="submit" value="Update">
         </form>

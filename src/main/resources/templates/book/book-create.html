@@ -10,7 +10,7 @@
 <div th:insert="~{header.html}"></div>
 <div class="book-body">
     <div class="book-details-container" th:object="${book}">
-        <form th:action="@{/books}" th:method="POST" th:object="${book}">
+        <form th:action="@{/books}" th:method="POST" th:object="${book}" enctype="multipart/form-data">
             <h1>Create Book</h1>
             <div class="book-detail">
                 <label for="name">Name: </label>
@@ -92,7 +92,7 @@
             </div>
             <div class="book-detail">
                 <label for="img">Image: </label>
-                <input id="img" type="file" th:value="${book.getBookImage()}" th:field="*{bookImage}" class="form-control-file">
+                <input id="img" type="file" th:field="*{image}" class="form-control-file">
             </div>
             <input type="submit" value="Create" class="custom-button">
         </form>

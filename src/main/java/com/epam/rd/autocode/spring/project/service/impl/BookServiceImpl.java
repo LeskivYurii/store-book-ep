@@ -6,16 +6,21 @@ import com.epam.rd.autocode.spring.project.dto.response.GetBookListResponse;
 import com.epam.rd.autocode.spring.project.exception.AlreadyExistException;
 import com.epam.rd.autocode.spring.project.exception.NotFoundException;
 import com.epam.rd.autocode.spring.project.mapper.BookMapper;
+import com.epam.rd.autocode.spring.project.media.service.BlobService;
+import com.epam.rd.autocode.spring.project.model.Book;
 import com.epam.rd.autocode.spring.project.repo.BookRepository;
 import com.epam.rd.autocode.spring.project.service.BookService;
 import com.epam.rd.autocode.spring.project.util.Boxed;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class BookServiceImpl implements BookService {
 
     public static final String BOOK_NOT_FOUND_ERROR_MESSAGE = "Book with %s name doesn't exist!";
@@ -23,10 +28,11 @@ public class BookServiceImpl implements BookService {
 
     private final BookRepository bookRepository;
     private final BookMapper bookMapper;
+    private final BlobService blobService;
 
     @Override
-    public Page<GetBookListResponse> getAllBooks(Pageable pageable) {
-        return bookRepository.findAll(pageable).map(bookMapper::toGetBookListResponse);
+    public Page<GetBookListResponse> getAllBooks(Pageable pageable, Specification<Book> specification) {
+        return bookRepository.findAll(specification, pageable).map(bookMapper::toGetBookListResponse);
     }
 
     @Override
@@ -83,6 +89,7 @@ public class BookServiceImpl implements BookService {
         Boxed
                 .of(id)
                 .flatOpt(bookRepository::findById)
+                .doWith(book -> blobService.deleteImage(book.getImage()))
                 .ifPresentOrElseThrow(bookRepository::delete,
                         () -> new NotFoundException(BOOK_NOT_FOUND_ID_ERROR_MESSAGE.formatted(id)));
     }

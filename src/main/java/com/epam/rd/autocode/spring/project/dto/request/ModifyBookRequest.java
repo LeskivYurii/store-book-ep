@@ -20,7 +20,6 @@ import java.time.LocalDate;
 @NoArgsConstructor
 public class ModifyBookRequest {
 
-    @NotNull
     @Min(1)
     private Long id;
     @NotBlank(message = "Name of the book can't be empty or null!")
@@ -49,6 +48,6 @@ public class ModifyBookRequest {
     private String description;
     @NotNull(message = "Language of the book can't be null!")
     private Language language;
-    private MultipartFile bookImage;
+    private MultipartFile image;
 
 }

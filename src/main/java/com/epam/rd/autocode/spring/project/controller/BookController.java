@@ -1,8 +1,10 @@
 package com.epam.rd.autocode.spring.project.controller;
 
 import com.epam.rd.autocode.spring.project.dto.request.ModifyBookRequest;
+import com.epam.rd.autocode.spring.project.dto.response.GetBookDetailsResponse;
 import com.epam.rd.autocode.spring.project.model.enums.AgeGroup;
 import com.epam.rd.autocode.spring.project.model.enums.Language;
+import com.epam.rd.autocode.spring.project.service.BookCriteriaService;
 import com.epam.rd.autocode.spring.project.service.BookService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -17,10 +19,11 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.multipart.MultipartFile;
+
+import java.math.BigDecimal;
+import java.time.LocalDate;
 
 @Controller
 @RequiredArgsConstructor
@@ -30,10 +33,25 @@ public class BookController {
     public static final String AGE_GROUP_ATTRIBUTE = "ageGroups";
     public static final String LANGUAGES_ATTRIBUTE = "languages";
     private final BookService bookService;
+    private final BookCriteriaService bookCriteriaService;
+
+    @GetMapping("/search")
+    public String search() {
+
+        return "/book/book-list";
+    }
 
     @GetMapping
-    public String getAllBook(@PageableDefault Pageable pageable, Model model) {
-        model.addAttribute("books", bookService.getAllBooks(pageable));
+    public String getBooks(@PageableDefault Pageable pageable, Model model,
+                           @RequestParam(required = false) String name, @RequestParam(required = false) String genre,
+                           @RequestParam(required = false) AgeGroup ageGroup, @RequestParam(required = false)
+                           BigDecimal minPrice, @RequestParam(required = false) BigDecimal maxPrice,
+                           @RequestParam(required = false) String author, @RequestParam(required = false)
+                           LocalDate publicationDate, @RequestParam(required = false) Language language) {
+        model.addAttribute("books", bookService.getAllBooks(pageable, bookCriteriaService.buildQuery(name,
+                genre, ageGroup, minPrice, maxPrice, author, publicationDate, language)));
+        model.addAttribute(LANGUAGES_ATTRIBUTE, Language.values());
+        model.addAttribute(AGE_GROUP_ATTRIBUTE, AgeGroup.values());
         return "/book/book-list";
     }
 
@@ -58,9 +76,9 @@ public class BookController {
     }
 
     @PutMapping("/{id}")
-    public String updateBook(@PathVariable Long id, @ModelAttribute(name = "book") @Valid ModifyBookRequest book, BindingResult bindingResult,
-                             Model model) {
-        if(bindingResult.hasErrors()) {
+    public String updateBook(@PathVariable Long id, @ModelAttribute(name = "book") @Valid ModifyBookRequest book,
+                             BindingResult bindingResult, Model model) {
+        if (bindingResult.hasErrors()) {
             model.addAttribute(AGE_GROUP_ATTRIBUTE, AgeGroup.values());
             model.addAttribute(LANGUAGES_ATTRIBUTE, Language.values());
             return "/book/book-edit";
@@ -79,13 +97,13 @@ public class BookController {
     @PostMapping
     public String createBook(@ModelAttribute(name = "book") @Valid ModifyBookRequest book, BindingResult bindingResult,
                              Model model) {
-        if(bindingResult.hasErrors()) {
+        if (bindingResult.hasErrors()) {
             model.addAttribute(AGE_GROUP_ATTRIBUTE, AgeGroup.values());
             model.addAttribute(LANGUAGES_ATTRIBUTE, Language.values());
             return "/book/book-create";
         }
-        bookService.addBook(book);
-        return "redirect:/books/" + book.getName();
+        GetBookDetailsResponse getBookDetailsResponse = bookService.addBook(book);
+        return "redirect:/books/" + getBookDetailsResponse.getId();
     }
 
 }
