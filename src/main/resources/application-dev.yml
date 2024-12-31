@@ -37,6 +37,13 @@ spring:
     user: sa
     password: password
     execute-in-transaction: true
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            client-id: ${GOOGLE_CLIENT_ID}
+            client-secret: ${GOOGLE_CLIENT_SECRET}
   mvc:
     hiddenmethod:
       filter:
@@ -54,3 +61,8 @@ security:
   jwt:
     secret: ${JWT_SECRET}
     expiration: ${JWT_EXPIRATION}
+azure:
+  storage:
+    connectionString: ${AZURE_BLOB_CONNECTION_STRING}
+    containerName: ${AZURE_BLOB_CONTAINER_NAME}
+    linkExpiration: ${AZURE_BLOB_LINK_EXPIRATION}

@@ -25,13 +25,17 @@ public class AuthController {
 
     @GetMapping("/login-page")
     public String getLoginPage(@RequestParam(value = "error", required = false) String error,
-                               @RequestParam(value = "logout", required = false) String logout, Model model) {
+                               @RequestParam(value = "logout", required = false) String logout,
+                               @RequestParam(value = "blocked", required = false)String blocked, Model model) {
         model.addAttribute("login", new LoginRequest());
         if (error != null) {
             model.addAttribute("errorMessage", "Invalid username or password!");
         }
         if (logout != null) {
             model.addAttribute("logoutMessage", "You have been logged out successfully.");
+        }
+        if (blocked != null) {
+            model.addAttribute("blockedMessage", "Your account has been blocked.");
         }
 
         return "/auth/login";
