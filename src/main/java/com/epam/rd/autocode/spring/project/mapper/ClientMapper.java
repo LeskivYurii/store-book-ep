@@ -13,18 +13,26 @@ import org.mapstruct.MappingTarget;
 import org.mapstruct.NullValuePropertyMappingStrategy;
 
 @Mapper(componentModel = "spring", uses = UserMapperHelper.class,
-        nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE )
+        nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
 public interface ClientMapper {
 
     @Mapping(target = "password", source = "clientDTO.password", qualifiedByName = "toEncodedPassword")
+    @Mapping(target = "phone", source = "phone")
     @Mapping(target = "active", constant = "true")
     @Mapping(target = "balance", constant = "0.0")
     Client toClient(CreateClientRequest clientDTO);
+
+    @Mapping(target = "password", source = "clientDTO.password", qualifiedByName = "toOauthEncodedPassword")
+    @Mapping(target = "phone", source = "phone")
+    @Mapping(target = "active", constant = "true")
+    @Mapping(target = "balance", constant = "0.0")
+    Client toOuathClient(CreateClientRequest clientDTO);
 
     GetClientDetailsResponse toGetClientDetailsResponse(Client client);
 
     GetClientListResponse toGetClientListResponse(Client client);
 
+    @Mapping(target = "phone", source = "phone")
     @Mapping(target = "balance", ignore = true)
     @Mapping(target = "password", source = "clientDTO.password", qualifiedByName = "toEncodedPassword")
     void updateClient(@MappingTarget Client client, UpdateClientRequest clientDTO);

@@ -34,7 +34,7 @@ public class CreateClientRequest {
     private String name;
     @DecimalMin(value = "0.0", inclusive = false, message = "Balance can't be zero or less!")
     private BigDecimal balance;
-    @NotBlank(message = "Name can't be empty or null!")
+    @NotBlank(message = "phone can't be empty or null!")
     private String phone;
 
 }

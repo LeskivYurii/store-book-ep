@@ -24,8 +24,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import java.net.http.HttpResponse;
-
 @Controller
 @RequiredArgsConstructor
 @RequestMapping("/clients")
@@ -61,7 +59,8 @@ public class ClientController {
     }
 
     @PostMapping
-    public String createClient(@ModelAttribute(name = CLIENT_ATTRIBUTE) @Valid CreateClientRequest clientDTO, BindingResult bindingResult) {
+    public String createClient(@ModelAttribute(name = CLIENT_ATTRIBUTE) @Valid CreateClientRequest clientDTO,
+                               BindingResult bindingResult) {
         if(bindingResult.hasErrors()) {
             return "/client/client-create";
         }
@@ -81,7 +80,8 @@ public class ClientController {
     }
 
     @DeleteMapping("/{email}")
-    public String deleteClientByEmail(@AuthenticationPrincipal UserDetailsAdapter userDetailsAdapter, @PathVariable String email, HttpServletResponse httpResponse) {
+    public String deleteClientByEmail(@AuthenticationPrincipal UserDetailsAdapter userDetailsAdapter,
+                                      @PathVariable String email, HttpServletResponse httpResponse) {
         clientService.deleteClientByEmail(email);
         if(userDetailsAdapter.getUsername().equals(email)) {
             httpResponse.addCookie(authService.logout());

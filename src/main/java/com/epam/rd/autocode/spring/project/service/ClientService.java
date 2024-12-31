@@ -18,6 +18,7 @@ public interface ClientService {
     void deleteClientByEmail(String email);
 
     GetClientDetailsResponse addClient(CreateClientRequest client);
+    GetClientDetailsResponse addOauthClient(CreateClientRequest client);
 
     void blockUnblockClient(String email);
 }

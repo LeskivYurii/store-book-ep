@@ -7,7 +7,6 @@ import com.epam.rd.autocode.spring.project.dto.response.GetClientListResponse;
 import com.epam.rd.autocode.spring.project.exception.AlreadyExistException;
 import com.epam.rd.autocode.spring.project.exception.NotFoundException;
 import com.epam.rd.autocode.spring.project.mapper.ClientMapper;
-import com.epam.rd.autocode.spring.project.model.Client;
 import com.epam.rd.autocode.spring.project.repo.ClientRepository;
 import com.epam.rd.autocode.spring.project.service.ClientService;
 import com.epam.rd.autocode.spring.project.util.Boxed;
@@ -16,6 +15,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -27,11 +27,13 @@ public class ClientServiceImpl implements ClientService {
     private final ClientMapper clientMapper;
 
     @Override
+    @Transactional(readOnly = true)
     public Page<GetClientListResponse> getAllClients(Pageable pageable) {
         return clientRepository.findAll(pageable).map(clientMapper::toGetClientListResponse);
     }
 
     @Override
+    @Transactional(readOnly = true)
     public GetClientDetailsResponse getClientByEmail(String email) {
         return Boxed
                 .of(email)
@@ -41,6 +43,7 @@ public class ClientServiceImpl implements ClientService {
     }
 
     @Override
+    @Transactional
     public GetClientDetailsResponse updateClientByEmail(String email, UpdateClientRequest clientDTO) {
         return Boxed
                 .of(email)
@@ -52,6 +55,7 @@ public class ClientServiceImpl implements ClientService {
     }
 
     @Override
+    @Transactional
     public void deleteClientByEmail(String email) {
         Boxed
                 .of(email)
@@ -61,6 +65,7 @@ public class ClientServiceImpl implements ClientService {
     }
 
     @Override
+    @Transactional
     public GetClientDetailsResponse addClient(CreateClientRequest client) {
         return Boxed
                 .of(client)
@@ -68,16 +73,31 @@ public class ClientServiceImpl implements ClientService {
                 .map(clientMapper::toClient)
                 .map(clientRepository::save)
                 .map(clientMapper::toGetClientDetailsResponse)
-                .orElseThrow(() -> new AlreadyExistException("Client with %s email already exist!".formatted(client.getEmail())));
+                .orElseThrow(() -> new AlreadyExistException("Client with %s email already exist!".formatted(
+                        client.getEmail())));
     }
 
     @Override
+    @Transactional
     public void blockUnblockClient(String email) {
         Boxed
                 .of(email)
                 .flatOpt(clientRepository::findClientByEmail)
                 .doWith(client -> client.setActive(!client.isActive()))
-                .ifPresentOrElseThrow(clientRepository::save, () -> new EntityNotFoundException(CLIENT_NOT_FOUND_ERROR_MESSAGE.formatted(email)));
+                .ifPresentOrElseThrow(clientRepository::save, () -> new EntityNotFoundException(
+                        CLIENT_NOT_FOUND_ERROR_MESSAGE.formatted(email)));
     }
 
+    @Override
+    @Transactional
+    public GetClientDetailsResponse addOauthClient(CreateClientRequest client) {
+        return Boxed
+                .of(client)
+                .filter(client1 -> !clientRepository.existsByEmail(client1.getEmail()))
+                .map(clientMapper::toOuathClient)
+                .map(clientRepository::save)
+                .map(clientMapper::toGetClientDetailsResponse)
+                .orElseThrow(() -> new AlreadyExistException("Client with %s email already exist!"
+                        .formatted(client.getEmail())));
+    }
 }
