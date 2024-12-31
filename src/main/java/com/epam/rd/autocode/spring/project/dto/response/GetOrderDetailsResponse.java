@@ -1,13 +1,11 @@
 package com.epam.rd.autocode.spring.project.dto.response;
 
 import com.epam.rd.autocode.spring.project.model.enums.OrderStatus;
-import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;

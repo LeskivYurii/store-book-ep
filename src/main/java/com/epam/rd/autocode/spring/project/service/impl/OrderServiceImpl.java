@@ -1,37 +1,30 @@
 package com.epam.rd.autocode.spring.project.service.impl;
 
-import com.epam.rd.autocode.spring.project.dto.request.CreateOrderRequest;
 import com.epam.rd.autocode.spring.project.dto.response.GetOrderDetailsResponse;
 import com.epam.rd.autocode.spring.project.dto.response.GetOrderListResponse;
 import com.epam.rd.autocode.spring.project.exception.NotFoundException;
 import com.epam.rd.autocode.spring.project.mapper.OrderMapper;
 import com.epam.rd.autocode.spring.project.model.BookItem;
-import com.epam.rd.autocode.spring.project.model.Client;
 import com.epam.rd.autocode.spring.project.model.Order;
 import com.epam.rd.autocode.spring.project.model.User;
 import com.epam.rd.autocode.spring.project.model.enums.OrderStatus;
 import com.epam.rd.autocode.spring.project.repo.CartItemRepository;
-import com.epam.rd.autocode.spring.project.repo.ClientRepository;
 import com.epam.rd.autocode.spring.project.repo.EmployeeRepository;
 import com.epam.rd.autocode.spring.project.repo.OrderRepository;
 import com.epam.rd.autocode.spring.project.security.UserDetailsAdapter;
-import com.epam.rd.autocode.spring.project.service.EmployeeService;
 import com.epam.rd.autocode.spring.project.service.OrderService;
 import com.epam.rd.autocode.spring.project.util.Boxed;
-import com.epam.rd.autocode.spring.project.validation.validator.UserOldPasswordValidation;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
-@Transactional
+@Transactional(readOnly = true)
 public class OrderServiceImpl implements OrderService {
 
     private final OrderRepository orderRepository;
@@ -102,7 +95,8 @@ public class OrderServiceImpl implements OrderService {
     }
 
     private void updateEmployeeEmail(Order order) {
-        User userDetails = ((UserDetailsAdapter) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUser();
+        User userDetails = ((UserDetailsAdapter) SecurityContextHolder.getContext().getAuthentication().getPrincipal())
+                .getUser();
         if ("ROLE_EMPLOYEE".equals(userDetails.getRole())) {
             order.setEmployee(employeeRepository.findEmployeeByEmail(userDetails.getEmail()).orElse(null));
         }

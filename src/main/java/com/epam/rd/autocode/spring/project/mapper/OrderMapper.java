@@ -1,6 +1,5 @@
 package com.epam.rd.autocode.spring.project.mapper;
 
-import com.epam.rd.autocode.spring.project.dto.request.CreateOrderRequest;
 import com.epam.rd.autocode.spring.project.dto.response.GetOrderDetailsResponse;
 import com.epam.rd.autocode.spring.project.dto.response.GetOrderListResponse;
 import com.epam.rd.autocode.spring.project.exception.CreateOrderException;
@@ -13,7 +12,6 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
 
-import java.math.BigDecimal;
 import java.util.List;
 
 @Mapper(componentModel = "spring", uses = OrderMapperHelper.class)
