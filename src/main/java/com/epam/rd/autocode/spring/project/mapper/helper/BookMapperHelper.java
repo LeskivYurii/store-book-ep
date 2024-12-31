@@ -1,6 +1,6 @@
 package com.epam.rd.autocode.spring.project.mapper.helper;
 
-import com.epam.rd.autocode.spring.project.media.service.BlobService;
+import com.epam.rd.autocode.spring.project.azure.service.BlobService;
 import lombok.RequiredArgsConstructor;
 import org.mapstruct.Named;
 import org.springframework.stereotype.Component;

@@ -6,7 +6,7 @@ import com.epam.rd.autocode.spring.project.dto.response.GetBookListResponse;
 import com.epam.rd.autocode.spring.project.exception.AlreadyExistException;
 import com.epam.rd.autocode.spring.project.exception.NotFoundException;
 import com.epam.rd.autocode.spring.project.mapper.BookMapper;
-import com.epam.rd.autocode.spring.project.media.service.BlobService;
+import com.epam.rd.autocode.spring.project.azure.service.BlobService;
 import com.epam.rd.autocode.spring.project.model.Book;
 import com.epam.rd.autocode.spring.project.repo.BookRepository;
 import com.epam.rd.autocode.spring.project.service.BookService;
