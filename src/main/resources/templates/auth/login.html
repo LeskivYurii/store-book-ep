@@ -16,6 +16,9 @@
         <div th:if="${errorMessage}" class="error-message">
             <p th:text="${errorMessage}" style="color: red"></p>
         </div>
+        <div th:if="${blockedMessage}" class="error-message">
+            <p th:text="${blockedMessage}" style="color: red"></p>
+        </div>
         <form action="/auth/login" th:method="POST" th:object="${login}" class="login-form">
             <div class="form-group">
                 <label for="username">Username: </label>
@@ -40,6 +43,7 @@
             <form action="/employees/create-page" method="get" id="signUp">
                 <input class="custom-button" type="submit" value="Create Employee">
             </form>
+            <a class="custom-button" href="http://localhost:8084/oauth2/authorization/google">Sign in with google </a>
         </div>
     </div>
 

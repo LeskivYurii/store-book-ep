@@ -25,7 +25,7 @@ public class Boxed<T> {
         } else if(this.value != null) {
             return new Boxed<>(mapper.apply(this.value));
         }
-        return null;
+        return Boxed.of(null);
     }
 
     public Boxed<T> filter(Predicate<T> criteria) {
@@ -34,7 +34,7 @@ public class Boxed<T> {
         } else if (criteria.test(this.value)) {
             return this;
         }
-        return null;
+        return Boxed.of(null);
     }
 
     public Boxed<T> doWith(Consumer<T> consumer) {
