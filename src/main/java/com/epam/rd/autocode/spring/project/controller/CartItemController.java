@@ -1,7 +1,6 @@
 package com.epam.rd.autocode.spring.project.controller;
 
 import com.epam.rd.autocode.spring.project.dto.request.AddCartItemRequest;
-import com.epam.rd.autocode.spring.project.dto.request.CreateOrderRequest;
 import com.epam.rd.autocode.spring.project.dto.response.GetBookItemResponse;
 import com.epam.rd.autocode.spring.project.service.CartItemService;
 import com.epam.rd.autocode.spring.project.service.ClientService;

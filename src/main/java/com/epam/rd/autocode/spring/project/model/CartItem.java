@@ -1,6 +1,5 @@
 package com.epam.rd.autocode.spring.project.model;
 
-import com.epam.rd.autocode.spring.project.util.Boxed;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;

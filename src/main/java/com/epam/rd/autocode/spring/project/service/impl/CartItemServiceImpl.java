@@ -14,11 +14,13 @@ import com.epam.rd.autocode.spring.project.service.CartItemService;
 import com.epam.rd.autocode.spring.project.util.Boxed;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class CartItemServiceImpl implements CartItemService {
 
     private final CartItemRepository cartItemRepository;
@@ -48,9 +50,11 @@ public class CartItemServiceImpl implements CartItemService {
 
     private CartItem toCartItem(AddCartItemRequest addCartItemRequest) {
         Book book = bookRepository.findById(addCartItemRequest.getBookId())
-                .orElseThrow(() -> new NotFoundException("Book with %s id doesn't exist".formatted(addCartItemRequest.getBookId())));
+                .orElseThrow(() -> new NotFoundException("Book with %s id doesn't exist".formatted(
+                        addCartItemRequest.getBookId())));
         Client client = clientRepository.findClientByEmail(addCartItemRequest.getClientEmail())
-                .orElseThrow(() -> new NotFoundException("Client with %s email does't exist!".formatted(addCartItemRequest.getClientEmail())));
+                .orElseThrow(() -> new NotFoundException("Client with %s email doesn't exist!".formatted(
+                        addCartItemRequest.getClientEmail())));
 
         return CartItem.builder()
                 .book(book)
