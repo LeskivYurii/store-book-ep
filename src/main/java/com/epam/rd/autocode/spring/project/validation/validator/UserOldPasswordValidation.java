@@ -2,14 +2,13 @@ package com.epam.rd.autocode.spring.project.validation.validator;
 
 import com.epam.rd.autocode.spring.project.dto.request.UpdateClientRequest;
 import com.epam.rd.autocode.spring.project.dto.request.UpdateEmployeeRequest;
+import com.epam.rd.autocode.spring.project.exception.NotFoundException;
 import com.epam.rd.autocode.spring.project.model.User;
 import com.epam.rd.autocode.spring.project.repo.UserRepository;
-import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanWrapperImpl;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
-import org.springframework.util.StringUtils;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 
@@ -33,14 +32,15 @@ public class UserOldPasswordValidation implements Validator {
                 .getPropertyValue("password");
         Object email = new BeanWrapperImpl(target)
                 .getPropertyValue("email");
+        User user = userRepository.findUserByEmail((String) email)
+                .orElseThrow(() -> new NotFoundException("User with %s email doesn't exist".formatted(email)));
 
         if(oldPassword != null && newPassword != null && !"".equals(oldPassword) && !"".equals(newPassword)) {
-            User user = userRepository.findUserByEmail((String) email)
-                    .orElseThrow(() -> new EntityNotFoundException("User with %s username doesn't exist!"));
             if(passwordEncoder.matches((String) oldPassword, user.getPassword())) {
                 errors.rejectValue("oldPassword", "400", "Old password is wrong");
             }
-        }  else if(!"".equals(newPassword) && newPassword != null && ("".equals(oldPassword) || oldPassword == null)) {
+        }  else if(!"".equals(newPassword) && newPassword != null && ("".equals(oldPassword)) && !passwordEncoder
+                .matches("", user.getPassword())) {
             errors.rejectValue("oldPassword", "400", "Enter old password to verify correctness!");
 
         }

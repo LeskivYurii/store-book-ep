@@ -53,8 +53,8 @@ public class EmployeeController {
     }
 
     @PutMapping("/{email}")
-    public String updateEmployee(@PathVariable(name = "email") String email, @ModelAttribute(name = EMPLOYEE_ATTRIBUTE) @Valid
-    UpdateEmployeeRequest employeeDTO, BindingResult bindingResult) {
+    public String updateEmployee(@PathVariable(name = "email") String email, @ModelAttribute(name = EMPLOYEE_ATTRIBUTE)
+    @Valid UpdateEmployeeRequest employeeDTO, BindingResult bindingResult) {
         userOldPasswordValidation.validate(employeeDTO, bindingResult);
         if(bindingResult.hasErrors()) {
             return "/employee/employee-edit";
@@ -69,7 +69,8 @@ public class EmployeeController {
     }
 
     @PostMapping
-    public String createEmployee(@ModelAttribute(name = EMPLOYEE_ATTRIBUTE) @Valid CreateEmployeeRequest employeeDTO, BindingResult bindingResult) {
+    public String createEmployee(@ModelAttribute(name = EMPLOYEE_ATTRIBUTE) @Valid CreateEmployeeRequest employeeDTO,
+                                 BindingResult bindingResult) {
         if(bindingResult.hasErrors()) {
             return "/employee/employee-create";
         }
@@ -78,7 +79,8 @@ public class EmployeeController {
     }
 
     @DeleteMapping("/{email}")
-    public String deleteEmployeeByEmail(@AuthenticationPrincipal UserDetailsAdapter userDetailsAdapter, @PathVariable String email, HttpServletResponse httpResponse) {
+    public String deleteEmployeeByEmail(@AuthenticationPrincipal UserDetailsAdapter userDetailsAdapter,
+                                        @PathVariable String email, HttpServletResponse httpResponse) {
         employeeService.deleteEmployeeByEmail(email);
         if(userDetailsAdapter.getUsername().equals(email)) {
             httpResponse.addCookie(authService.logout());

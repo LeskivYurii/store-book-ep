@@ -13,7 +13,14 @@ public class UserMapperHelper {
 
     @Named("toEncodedPassword")
     public String toEncodedPassword(String password) {
+        if (password != null && !password.isEmpty()) {
+            return passwordEncoder.encode(password);
+        }
+        return null;
+    }
 
+    @Named("toOauthEncodedPassword")
+    public String toOauthEncodedPassword(String password) {
         return passwordEncoder.encode(password);
     }
 

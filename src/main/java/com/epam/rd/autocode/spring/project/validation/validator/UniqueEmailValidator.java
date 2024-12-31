@@ -20,12 +20,13 @@ public class UniqueEmailValidator implements ConstraintValidator<UniqueEmail, St
     @Override
     public boolean isValid(String value, ConstraintValidatorContext context) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if(authentication.getName().equals("anonymousUser") || value != null) {
+        if(authentication.getName().equals("anonymousUser")) {
             return !userRepository.existsByEmail(value);
         } else if (((UserDetailsAdapter) authentication.getPrincipal()).getUser().getRole().equals("ROLE_EMPLOYEE")) {
             return true;
         } else  if (((UserDetailsAdapter) authentication.getPrincipal()).getUser().getRole().equals("ROLE_CLIENT")) {
-            return (SecurityContextHolder.getContext().getAuthentication().getName().equals(value) || !userRepository.existsByEmail(value));
+            return (SecurityContextHolder.getContext().getAuthentication().getName().equals(value)) ||
+                   !userRepository.existsByEmail(value);
 
         }
 

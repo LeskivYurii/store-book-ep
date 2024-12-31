@@ -14,9 +14,11 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class EmployeeServiceImpl implements EmployeeService {
 
     public static final String EMPLOYEE_NOT_FOUND_ERROR_MESSAGE = "Employee with %s email wasn't found!";
@@ -66,7 +68,8 @@ public class EmployeeServiceImpl implements EmployeeService {
                 .map(employeeMapper::toEmployee)
                 .map(employeeRepository::save)
                 .map(employeeMapper::toGetEmployeeDetailsResponse)
-                .orElseThrow(() -> new AlreadyExistException("Employee with %s email already exist!".formatted(employeeDTO.getEmail())));
+                .orElseThrow(() -> new AlreadyExistException("Employee with %s email already exist!"
+                        .formatted(employeeDTO.getEmail())));
     }
 
 }
