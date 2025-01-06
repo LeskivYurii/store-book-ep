@@ -23,6 +23,7 @@ public interface OrderMapper {
     @Mapping(target = "status", constant = "NEW")
     Order toOrder(List<CartItem> cartItemList, String clientEmail);
 
+    @Mapping(target = "id", source = "id")
     @Mapping(target = "clientEmail", source = "client.email")
     @Mapping(target = "employeeEmail", source = "employee.email")
     @Mapping(target = "createdAt", source = "createdAt")
@@ -31,6 +32,7 @@ public interface OrderMapper {
     @Mapping(target = "bookItems", source = "bookItems", qualifiedByName = "toGetBookItemResponse")
     GetOrderDetailsResponse toGetOrderDetailsResponse(Order order);
 
+    @Mapping(target = "id", source = "id")
     @Mapping(target = "clientEmail", source = "client.email")
     @Mapping(target = "employeeEmail", source = "employee.email")
     @Mapping(target = "createdAt", source = "createdAt")

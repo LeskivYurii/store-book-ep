@@ -23,8 +23,8 @@ public class OrderServiceAspect {
 
     @Around(
             value = "execution(public com.epam.rd.autocode.spring.project.dto.response.GetOrderDetailsResponse createOrder())")
-    public void createOrderAdvice(ProceedingJoinPoint joinPoint) throws Throwable {
-        CustomLogger.log(log, "CREATE_ORDER_REQUEST", "CREATE_ORDER_RESPONSE", joinPoint);
+    public Object createOrderAdvice(ProceedingJoinPoint joinPoint) throws Throwable {
+        return CustomLogger.log(log, "CREATE_ORDER_REQUEST", "CREATE_ORDER_RESPONSE", joinPoint);
     }
 
     @Around(

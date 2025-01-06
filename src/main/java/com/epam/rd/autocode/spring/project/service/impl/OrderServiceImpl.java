@@ -15,6 +15,8 @@ import com.epam.rd.autocode.spring.project.security.UserDetailsAdapter;
 import com.epam.rd.autocode.spring.project.service.OrderService;
 import com.epam.rd.autocode.spring.project.util.Boxed;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.MessageSource;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -31,6 +33,7 @@ public class OrderServiceImpl implements OrderService {
     private final OrderMapper orderMapper;
     private final CartItemRepository cartItemRepository;
     private final EmployeeRepository employeeRepository;
+    private final MessageSource messageSource;
 
     @Override
     public Page<GetOrderListResponse> getOrdersByClient(String clientEmail, Pageable pageable) {
@@ -43,7 +46,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    @PreAuthorize("hasRole('CLIENT')")
+    @Transactional
     public GetOrderDetailsResponse createOrder() {
         String clientEmail = SecurityContextHolder.getContext().getAuthentication().getName();
         return Boxed
@@ -54,7 +57,8 @@ public class OrderServiceImpl implements OrderService {
                 .map(orderRepository::save)
                 .doWith(order -> cartItemRepository.deleteAllByClientEmail(clientEmail))
                 .map(orderMapper::toGetOrderDetailsResponse)
-                .orElseThrow(() -> new IllegalArgumentException("Orders can't be created without items!"));
+                .orElseThrow(() -> new IllegalArgumentException(messageSource.getMessage("error.order.noItems",
+                        null, LocaleContextHolder.getLocale())));
     }
 
     @Override
@@ -63,7 +67,8 @@ public class OrderServiceImpl implements OrderService {
                 .of(id)
                 .flatOpt(orderRepository::findById)
                 .map(orderMapper::toGetOrderDetailsResponse)
-                .orElseThrow(() -> new NotFoundException("Order with %s doesn't exist!".formatted(id)));
+                .orElseThrow(() -> new NotFoundException(messageSource.getMessage("error.order.notfound",
+                        null, LocaleContextHolder.getLocale()).formatted(id)));
     }
 
     @Override
@@ -72,6 +77,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
+    @Transactional
     public GetOrderDetailsResponse updateStatus(Long id, OrderStatus orderStatus) {
         return Boxed
                 .of(id)
@@ -81,7 +87,8 @@ public class OrderServiceImpl implements OrderService {
                 .doWith(this::updateEmployeeEmail)
                 .map(orderRepository::save)
                 .map(orderMapper::toGetOrderDetailsResponse)
-                .orElseThrow(() -> new NotFoundException("Order with %s doesn't exist!".formatted(id)));
+                .orElseThrow(() -> new NotFoundException(messageSource.getMessage("error.order.notfound",
+                        null, LocaleContextHolder.getLocale()).formatted(id)));
     }
 
     private void returnQuantityIfCancelled(Order order) {
