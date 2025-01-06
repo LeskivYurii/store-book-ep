@@ -12,6 +12,8 @@ import com.epam.rd.autocode.spring.project.service.ClientService;
 import com.epam.rd.autocode.spring.project.util.Boxed;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.MessageSource;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -21,10 +23,11 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class ClientServiceImpl implements ClientService {
 
-    public static final String CLIENT_NOT_FOUND_ERROR_MESSAGE = "Client with %s email wasn't found!";
+    public static final String CLIENT_NOT_FOUND_ERROR_MESSAGE = "error.client.notfound";
 
     private final ClientRepository clientRepository;
     private final ClientMapper clientMapper;
+    private final MessageSource messageSource;
 
     @Override
     @Transactional(readOnly = true)
@@ -39,7 +42,8 @@ public class ClientServiceImpl implements ClientService {
                 .of(email)
                 .flatOpt(clientRepository::findClientByEmail)
                 .map(clientMapper::toGetClientDetailsResponse)
-                .orElseThrow(() -> new NotFoundException(CLIENT_NOT_FOUND_ERROR_MESSAGE.formatted(email)));
+                .orElseThrow(() -> new NotFoundException(messageSource.getMessage(CLIENT_NOT_FOUND_ERROR_MESSAGE, null,
+                        LocaleContextHolder.getLocale()).formatted(email)));
     }
 
     @Override
@@ -51,7 +55,8 @@ public class ClientServiceImpl implements ClientService {
                 .doWith(client1 -> clientMapper.updateClient(client1, clientDTO))
                 .map(clientRepository::save)
                 .map(clientMapper::toGetClientDetailsResponse)
-                .orElseThrow(() -> new NotFoundException(CLIENT_NOT_FOUND_ERROR_MESSAGE.formatted(email)));
+                .orElseThrow(() -> new NotFoundException(messageSource.getMessage(CLIENT_NOT_FOUND_ERROR_MESSAGE, null,
+                        LocaleContextHolder.getLocale()).formatted(email)));
     }
 
     @Override
@@ -61,7 +66,8 @@ public class ClientServiceImpl implements ClientService {
                 .of(email)
                 .flatOpt(clientRepository::findClientByEmail)
                 .ifPresentOrElseThrow(clientRepository::delete,
-                        () -> new NotFoundException(CLIENT_NOT_FOUND_ERROR_MESSAGE.formatted(email)));
+                        () -> new NotFoundException(messageSource.getMessage(CLIENT_NOT_FOUND_ERROR_MESSAGE, null,
+                                LocaleContextHolder.getLocale()).formatted(email)));
     }
 
     @Override
@@ -73,7 +79,8 @@ public class ClientServiceImpl implements ClientService {
                 .map(clientMapper::toClient)
                 .map(clientRepository::save)
                 .map(clientMapper::toGetClientDetailsResponse)
-                .orElseThrow(() -> new AlreadyExistException("Client with %s email already exist!".formatted(
+                .orElseThrow(() -> new AlreadyExistException(messageSource.getMessage(CLIENT_NOT_FOUND_ERROR_MESSAGE, null,
+                        LocaleContextHolder.getLocale()).formatted(
                         client.getEmail())));
     }
 
@@ -85,7 +92,8 @@ public class ClientServiceImpl implements ClientService {
                 .flatOpt(clientRepository::findClientByEmail)
                 .doWith(client -> client.setActive(!client.isActive()))
                 .ifPresentOrElseThrow(clientRepository::save, () -> new EntityNotFoundException(
-                        CLIENT_NOT_FOUND_ERROR_MESSAGE.formatted(email)));
+                        messageSource.getMessage(CLIENT_NOT_FOUND_ERROR_MESSAGE, null,
+                                LocaleContextHolder.getLocale()).formatted(email)));
     }
 
     @Override
@@ -97,7 +105,7 @@ public class ClientServiceImpl implements ClientService {
                 .map(clientMapper::toOuathClient)
                 .map(clientRepository::save)
                 .map(clientMapper::toGetClientDetailsResponse)
-                .orElseThrow(() -> new AlreadyExistException("Client with %s email already exist!"
-                        .formatted(client.getEmail())));
+                .orElseThrow(() -> new AlreadyExistException( messageSource.getMessage("error.client.alreadyExist", null,
+                                LocaleContextHolder.getLocale()).formatted(client.getEmail())));
     }
 }

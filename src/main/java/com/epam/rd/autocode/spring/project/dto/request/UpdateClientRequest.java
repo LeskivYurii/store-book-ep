@@ -20,29 +20,27 @@ import java.math.BigDecimal;
 @ValidPassword
 public class UpdateClientRequest {
 
-    @Email(message = "It's not email!")
+    @Email(message = "{email.validation}")
+    @NotBlank(message = "{email.validation.notBlank}")
     @UniqueEmail
     private String email;
     @EqualsAndHashCode.Exclude
     @Pattern(regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d).{6,}$|^$",
-            message = "Password must contain at least one number, lower case and upper case letters and be 6 symbols" +
-                      " long!")
+            message = "{password.validation.regex}")
     private String password;
     @EqualsAndHashCode.Exclude
     @Pattern(regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d).{6,}$|^$",
-            message = "Password must contain at least one number, lower case and upper case letters and be 6 symbols" +
-                      " long!")
+            message = "{password.validation.regex}")
     private String confirmationPassword;
     @EqualsAndHashCode.Exclude
     @Pattern(regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d).{6,}$|^$",
-            message = "Password must contain at least one number, lower case and upper case letters and be 6 symbols" +
-                      " long!")
+            message = "{password.validation.regex}")
     private String oldPassword;
-    @NotBlank(message = "Name can't be empty or null!")
+    @NotBlank(message = "{name.validation.notBlank}")
     private String name;
-    @DecimalMin(value = "0.0",  message = "Balance can't be zero or less!")
+    @DecimalMin(value = "0.0",  message = "{balance.validation.min}")
     private BigDecimal balance;
-    @NotBlank(message = "Name can't be empty or null!")
+    @NotBlank(message = "{phone.validation.notBlank}")
     private String phone;
 
     public UpdateClientRequest(GetClientDetailsResponse getClientDetailsResponse) {

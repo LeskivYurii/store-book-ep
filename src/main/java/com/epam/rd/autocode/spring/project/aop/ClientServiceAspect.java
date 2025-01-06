@@ -29,8 +29,8 @@ public class ClientServiceAspect {
 
     @Around(
             value = "execution(public void deleteClientByEmail(String))")
-    public void deleteClientByEmailAdvice(ProceedingJoinPoint joinPoint) throws Throwable {
-        CustomLogger.log(log, "DELETE_CLIENT_BY_EMAIL_REQUEST",
+    public Object deleteClientByEmailAdvice(ProceedingJoinPoint joinPoint) throws Throwable {
+       return CustomLogger.log(log, "DELETE_CLIENT_BY_EMAIL_REQUEST",
                 "DELETE_CLIENT_BY_EMAIL_RESPONSE", joinPoint);
     }
 

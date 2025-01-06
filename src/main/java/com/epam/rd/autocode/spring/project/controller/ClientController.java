@@ -11,6 +11,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -36,29 +37,34 @@ public class ClientController {
     private final UserOldPasswordValidation userOldPasswordValidation;
 
     @GetMapping
+    @PreAuthorize("hasRole('EMPLOYEE')")
     public String getAllClient(@PageableDefault Pageable pageable, Model model) {
         model.addAttribute("clients", clientService.getAllClients(pageable));
         return "/client/client-list";
     }
 
+    @PreAuthorize("hasRole('EMPLOYEE') or @authExpressions.isUserAllowed(#email)")
     @GetMapping("/{email}")
     public String getClientByEmail(@PathVariable String email, Model model) {
         model.addAttribute(CLIENT_ATTRIBUTE, clientService.getClientByEmail(email));
         return "/client/client-details";
     }
 
+    @PreAuthorize("hasRole('EMPLOYEE') or @authExpressions.isUserAllowed(#email)")
     @GetMapping("/{email}/edit-page")
     public String getEditPage(@PathVariable String email, Model model) {
         model.addAttribute(CLIENT_ATTRIBUTE, new UpdateClientRequest(clientService.getClientByEmail(email)));
         return "/client/client-edit";
     }
 
+    @PreAuthorize("hasRole('EMPLOYEE') or isAnonymous()")
     @GetMapping("/create-page")
     public String getCreatePage(@ModelAttribute(name = CLIENT_ATTRIBUTE) CreateClientRequest clientDTO) {
         return "/client/client-create";
     }
 
     @PostMapping
+    @PreAuthorize("hasRole('EMPLOYEE') or isAnonymous()")
     public String createClient(@ModelAttribute(name = CLIENT_ATTRIBUTE) @Valid CreateClientRequest clientDTO,
                                BindingResult bindingResult) {
         if(bindingResult.hasErrors()) {
@@ -69,6 +75,7 @@ public class ClientController {
     }
 
     @PutMapping("/{email}")
+    @PreAuthorize("hasRole('EMPLOYEE') or @authExpressions.isUserAllowed(#email)")
     public String updateClient(@PathVariable String email, @ModelAttribute(name = CLIENT_ATTRIBUTE) @Valid
     UpdateClientRequest clientDTO, BindingResult bindingResult) {
         userOldPasswordValidation.validate(clientDTO, bindingResult);
@@ -80,6 +87,7 @@ public class ClientController {
     }
 
     @DeleteMapping("/{email}")
+    @PreAuthorize("hasRole('EMPLOYEE') or @authExpressions.isUserAllowed(#email)")
     public String deleteClientByEmail(@AuthenticationPrincipal UserDetailsAdapter userDetailsAdapter,
                                       @PathVariable String email, HttpServletResponse httpResponse) {
         clientService.deleteClientByEmail(email);
@@ -90,6 +98,7 @@ public class ClientController {
     }
 
     @PatchMapping("/{email}")
+    @PreAuthorize("hasRole('EMPLOYEE')")
     public String blockUnblockClient(@PathVariable String email) {
         clientService.blockUnblockClient(email);
 

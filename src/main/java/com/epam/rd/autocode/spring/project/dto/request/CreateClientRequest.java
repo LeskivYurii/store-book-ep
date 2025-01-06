@@ -18,23 +18,23 @@ import java.math.BigDecimal;
 @ValidPassword
 public class CreateClientRequest {
 
-    @Email(message = "It's not email!")
-    @NotBlank(message = "Email can't be empty!")
+    @Email(message = "{email.validation}")
+    @NotBlank(message = "{email.validation.notBlank}")
     private String email;
     @EqualsAndHashCode.Exclude
-    @NotBlank(message = "Password can't be empty or null!")
+    @NotBlank(message = "{password.validation.notBlank")
     @Pattern(regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d).{6,}$",
-            message = "Password must contain at least one number, lower case and upper case letters and be 6 symbols long!")
+            message = "{password.validation.regex}")
     private String password;
     @EqualsAndHashCode.Exclude
     @Pattern(regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d).{6,}$",
-            message = "Password must contain at least one number, lower case and upper case letters and be 6 symbols long!")
+            message = "{password.validation.regex}")
     private String confirmationPassword;
-    @NotBlank(message = "Name can't be empty or null!")
+    @NotBlank(message = "{name.validation.notBlank}")
     private String name;
-    @DecimalMin(value = "0.0", inclusive = false, message = "Balance can't be zero or less!")
+    @DecimalMin(value = "0.0", inclusive = false, message = "{balance.validation.min}")
     private BigDecimal balance;
-    @NotBlank(message = "phone can't be empty or null!")
+    @NotBlank(message = "{phone.validation.notBlank}")
     private String phone;
 
 }

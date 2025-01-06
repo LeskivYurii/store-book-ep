@@ -2,7 +2,7 @@
 <html lang="en" xmlns:sec="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
-    <title>Edit client page</title>
+    <title th:text="#{client.edit}"></title>
     <link rel="stylesheet" type="text/css" href="/css/styles.css">
 </head>
 <body>
@@ -10,53 +10,53 @@
 <div class="client-body">
     <form th:action="@{/clients/{email}(email=${client.email})}" th:method="PUT" th:object="${client}"
           class="form-container">
-        <h2>Edit Client</h2>
+        <h2 th:text="#{client.edit}"></h2>
         <div class="form-group">
-            <label for="name">Name: </label>
+            <label for="name" th:text="#{user.name}"></label>
             <small th:if="${#fields.hasErrors('name')}" style="color: red" th:errors="*{name}"></small>
             <br th:if="${#fields.hasErrors('name')}">
-            <input id="name" type="text" th:value="${client.getName()}" th:field="*{name}">
+            <input th:placeholder="#{user.name.placeholder}" id="name" type="text" th:value="${client.getName()}" th:field="*{name}">
         </div>
         <div class="form-group">
-            <label for="email">Email: </label>
+            <label for="email" th:text="#{user.email}"></label>
             <small th:if="${#fields.hasErrors('email')}" style="color: red" th:errors="*{email}"></small>
             <br th:if="${#fields.hasErrors('email')}">
             <input id="email" type="email" th:value="${client.getEmail()}" th:field="*{email}"
-                   th:attr="disabled=${client.email.equals(#authentication.getName()) ? null : 'disabled'}">
+                  th:placeholder="#{user.email.placeholder}" th:attr="disabled=${client.email.equals(#authentication.getName()) ? null : 'disabled'}">
         </div>
         <div class="form-group">
-            <label for="phone">Phone: </label>
+            <label for="phone" th:text="#{user.phone}"></label>
             <small th:if="${#fields.hasErrors('phone')}" style="color: red" th:errors="*{phone}"></small>
             <br th:if="${#fields.hasErrors('phone')}">
-            <input id="phone" type="text" th:value="${client.getPhone()}" th:field="*{phone}">
+            <input id="phone" th:placeholder="#{user.phone.placeholder}" type="text" th:value="${client.getPhone()}" th:field="*{phone}">
         </div>
         <div class="form-group" sec:authorize="hasRole('EMPLOYEE')">
-            <label for="balance">Balance: </label>
+            <label for="balance" th:text="#{client.balance}"></label>
             <small th:if="${#fields.hasErrors('balance')}" style="color: red" th:errors="*{balance}"></small>
             <br th:if="${#fields.hasErrors('balance')}">
-            <input id="balance" type="number" th:value="${client.getBalance()}" th:field="*{balance}">
+            <input id="balance" type="number" th:field="*{balance}">
         </div>
         <div class="form-group" sec:authorize="hasRole('CLIENT')">
-            <label for="password">Password: </label>
+            <label for="password" th:text="#{user.password}"> </label>
             <small th:if="${#fields.hasErrors('password')}" style="color: red" th:errors="*{password}"></small>
             <br th:if="${#fields.hasErrors('password')}">
-            <input id="password" type="password" th:value="${client.getPassword()}" th:field="*{password}">
+            <input th:placeholder="#{user.password.placeholder}" id="password" type="password" th:value="${client.getPassword()}" th:field="*{password}">
         </div>
         <div class="form-group" sec:authorize="hasRole('CLIENT')">
-            <label for="confirmationPassword">Confirm Password: </label>
+            <label for="confirmationPassword" th:text="#{user.confirmationPassword}">Confirm Password: </label>
             <small th:if="${#fields.hasErrors('confirmationPassword')}" style="color: red"
                    th:errors="*{confirmationPassword}"></small>
             <br th:if="${#fields.hasErrors('confirmationPassword')}">
-            <input id="confirmationPassword" type="password" th:value="${client.getConfirmationPassword()}"
+            <input th:placeholder="#{user.confirmationPassword.placeholder}" id="confirmationPassword" type="password" th:value="${client.getConfirmationPassword()}"
                    th:field="*{confirmationPassword}">
         </div>
         <div class="form-group" sec:authorize="hasRole('CLIENT')">
-            <label for="oldPassword">Old Password: </label>
+            <label for="oldPassword" th:text="#{user.oldPassword}"></label>
             <small th:if="${#fields.hasErrors('oldPassword')}" style="color: red" th:errors="*{oldPassword}"></small>
             <br th:if="${#fields.hasErrors('oldPassword')}">
-            <input id="oldPassword" type="password" th:value="${client.getOldPassword()}" th:field="*{oldPassword}">
+            <input th:placeholder="#{user.oldPassword.placeholder}" id="oldPassword" type="password" th:value="${client.getOldPassword()}" th:field="*{oldPassword}">
         </div>
-        <input type="submit" value="Update" class="custom-button">
+        <input type="submit" th:value="#{operations.update}" class="custom-button">
     </form>
 </div>
 </body>
