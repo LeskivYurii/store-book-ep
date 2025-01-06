@@ -10,6 +10,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -37,7 +38,6 @@ public class BookController {
 
     @GetMapping("/search")
     public String search() {
-
         return "/book/book-list";
     }
 
@@ -62,12 +62,14 @@ public class BookController {
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('EMPLOYEE')")
     public String deleteBook(@PathVariable Long id) {
         bookService.deleteBookById(id);
         return "redirect:/books";
     }
 
     @GetMapping("/{id}/edit-page")
+    @PreAuthorize("hasRole('EMPLOYEE')")
     public String getEditPage(@PathVariable Long id, Model model) {
         model.addAttribute("book", bookService.getBookById(id));
         model.addAttribute(AGE_GROUP_ATTRIBUTE, AgeGroup.values());
@@ -76,6 +78,7 @@ public class BookController {
     }
 
     @PutMapping("/{id}")
+    @PreAuthorize("hasRole('EMPLOYEE')")
     public String updateBook(@PathVariable Long id, @ModelAttribute(name = "book") @Valid ModifyBookRequest book,
                              BindingResult bindingResult, Model model) {
         if (bindingResult.hasErrors()) {
@@ -88,6 +91,7 @@ public class BookController {
     }
 
     @GetMapping("/create-page")
+    @PreAuthorize("hasRole('EMPLOYEE')")
     public String getCreatePage(@ModelAttribute(name = "book") ModifyBookRequest modifyBookRequest, Model model) {
         model.addAttribute(AGE_GROUP_ATTRIBUTE, AgeGroup.values());
         model.addAttribute(LANGUAGES_ATTRIBUTE, Language.values());
@@ -95,6 +99,7 @@ public class BookController {
     }
 
     @PostMapping
+    @PreAuthorize("hasRole('EMPLOYEE')")
     public String createBook(@ModelAttribute(name = "book") @Valid ModifyBookRequest book, BindingResult bindingResult,
                              Model model) {
         if (bindingResult.hasErrors()) {

@@ -11,9 +11,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class BookItemDTO {
 
-    @NotNull(message = "Book can't be null!")
+    @NotNull(message = "{book.validation}")
     private Long bookId;
-    @Min(value = 1, message = "Quantity of product can't be zero or less!")
+    @Min(value = 1, message = "{book.amount.validation.min}")
     private Integer quantity;
 
     public BookItemDTO create() {

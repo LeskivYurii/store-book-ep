@@ -31,8 +31,8 @@ public class BookServiceAspect {
 
     @Around(
             value = "execution(public void deleteBookByName(String))")
-    public void deleteBookByNameAdvice(ProceedingJoinPoint joinPoint) throws Throwable {
-        CustomLogger.log(log, "DELETE_BOOK_BY_NAME_REQUEST", "DELETE_BOOK_BY_NAME_RESPONSE",
+    public Object deleteBookByNameAdvice(ProceedingJoinPoint joinPoint) throws Throwable {
+       return CustomLogger.log(log, "DELETE_BOOK_BY_NAME_REQUEST", "DELETE_BOOK_BY_NAME_RESPONSE",
                 joinPoint);
     }
 

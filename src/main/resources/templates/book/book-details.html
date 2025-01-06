@@ -3,24 +3,24 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Book Details</title>
+    <title th:text="#{book.details}"></title>
     <link rel="stylesheet" type="text/css" href="/css/styles.css">
 </head>
 <body>
 <div th:insert="~{header.html}"></div>
 <div class="book-body">
     <div class="book-details-container">
-        <h1>Book Details</h1>
+        <h1 th:text="#{book.details}"></h1>
         <div class="book-cover">
             <img th:if="${book.image} == null" src="/img/default_book_cover.jpg" alt="Book Cover">
             <img th:if="${book.image} != null" th:src="${book.getImage()}" alt="Book Cover">
         </div>
         <div sec:authorize="hasRole('EMPLOYEE')" class="button-group">
             <form th:action="@{/books/{id}(id=${book.getId()})}" th:method="delete">
-                <input type="submit" class="custom-button" value="Delete">
+                <input type="submit" class="custom-button" th:value="#{operations.delete}">
             </form>
             <form th:action="@{/books/{id}/edit-page(id=${book.getId()})}" th:method="get">
-                <input type="submit" class="custom-button" value="Edit">
+                <input type="submit" class="custom-button" th:value="#{operations.update}">
             </form>
         </div>
         <div class="book-details">
@@ -29,59 +29,59 @@
                 <span id="book-id" th:text="${book.getId()}"></span>
             </div>
             <div class="book-detail">
-                <strong>Name:</strong>
+                <strong th:text="#{book.name}"></strong>
                 <span id="book-name" th:text="${book.getName()}"></span>
             </div>
             <div class="book-detail">
-                <strong>Genre:</strong>
+                <strong th:text="#{book.genre}"></strong>
                 <span id="book-genre" th:text="${book.getGenre()}"></span>
             </div>
             <div class="book-detail">
-                <strong>Age Group:</strong>
+                <strong th:text="#{book.age-group}"></strong>
                 <span id="book-age-group"
-                      th:text="${book.getAgeGroup().name().substring(0,1) + book.getAgeGroup().name().substring(1).toLowerCase()}"></span>
+                      th:text="#{${book.getAgeGroup()}}"></span>
             </div>
             <div class="book-detail">
-                <strong>Price:</strong>
-                <span id="book-price" th:text="${book.getPrice() + ' grn.'}"></span>
+                <strong th:text="#{book.price}"></strong>
+                <span id="book-price" th:text="${book.getPrice() + ' '} + #{currency}"></span>
             </div>
             <div class="book-detail">
-                <strong>Publication Date:</strong>
+                <strong th:text="#{book.publication-date}"></strong>
                 <span id="book-publication-date" th:text="${book.getPublicationDate()}"></span>
             </div>
             <div class="book-detail">
-                <strong>Author:</strong>
+                <strong th:text="#{book.author}"></strong>
                 <span id="book-author" th:text="${book.getAuthor()}"></span>
             </div>
             <div class="book-detail">
-                <strong>Pages:</strong>
+                <strong th:text="#{book.pages}"></strong>
                 <span id="book-pages" th:text="${book.getPages()}"></span>
             </div>
             <div class="book-detail" sec:authorize="hasRole('EMPLOYEE')">
-                <strong>Quantity:</strong>
+                <strong th:text="#{book.quantity}"></strong>
                 <span id="book-quantity" th:text="${book.getQuantity()}"></span>
             </div>
             <div class="book-detail">
-                <strong>Characteristics:</strong>
+                <strong th:text="#{book.characteristics}"></strong>
                 <span id="book-characteristics" th:text="${book.getCharacteristics()}"></span>
             </div>
             <div class="book-detail">
-                <strong>Description:</strong>
+                <strong th:text="#{book.description}"></strong>
                 <span id="book-description" th:text="${book.getDescription()}">
 
                 </span>
             </div>
             <div class="book-detail">
-                <strong>Language:</strong>
+                <strong th:text="#{book.language}"></strong>
                 <span id="book-language"
-                      th:text="${book.getLanguage().name().substring(0,1) + book.getLanguage().name().substring(1).toLowerCase()}"></span>
+                      th:text="#{${book.getLanguage()}}"></span>
             </div>
             <div class="book-detail" sec:authorize="hasRole('EMPLOYEE')">
-                <strong>Created At:</strong>
+                <strong th:text="#{created.at}"></strong>
                 <span id="book-created-at" th:text="${book.getCreatedAt()}"></span>
             </div>
             <div class="book-detail" sec:authorize="hasRole('EMPLOYEE')">
-                <strong>Updated At:</strong>
+                <strong th:text="#{updated.at}"></strong>
                 <span id="book-updated-at" th:text="${book.getUpdatedAt()}"></span>
             </div>
         </div>

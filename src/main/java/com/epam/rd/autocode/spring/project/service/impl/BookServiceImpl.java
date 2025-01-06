@@ -12,6 +12,8 @@ import com.epam.rd.autocode.spring.project.repo.BookRepository;
 import com.epam.rd.autocode.spring.project.service.BookService;
 import com.epam.rd.autocode.spring.project.util.Boxed;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.MessageSource;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
@@ -23,12 +25,13 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional(readOnly = true)
 public class BookServiceImpl implements BookService {
 
-    public static final String BOOK_NOT_FOUND_ERROR_MESSAGE = "Book with %s name doesn't exist!";
-    public static final String BOOK_NOT_FOUND_ID_ERROR_MESSAGE = "Book with %s id doesn't exist!";
+    public static final String BOOK_NOT_FOUND_ERROR_MESSAGE = "error.book.name.notfound";
+    public static final String BOOK_NOT_FOUND_ID_ERROR_MESSAGE = "error.book.notfound";
 
     private final BookRepository bookRepository;
     private final BookMapper bookMapper;
     private final BlobService blobService;
+    private final MessageSource messageSource;
 
     @Override
     public Page<GetBookListResponse> getAllBooks(Pageable pageable, Specification<Book> specification) {
@@ -41,7 +44,8 @@ public class BookServiceImpl implements BookService {
                 .of(name)
                 .map(bookRepository::findBookByName)
                 .map(bookMapper::toGetBookDetailsResponse)
-                .orElseThrow(() -> new NotFoundException(BOOK_NOT_FOUND_ERROR_MESSAGE.formatted(name)));
+                .orElseThrow(() -> new NotFoundException(messageSource.getMessage(BOOK_NOT_FOUND_ERROR_MESSAGE, null,
+                        LocaleContextHolder.getLocale()).formatted(name)));
     }
 
     @Override
@@ -50,7 +54,8 @@ public class BookServiceImpl implements BookService {
                 .of(id)
                 .flatOpt(bookRepository::findById)
                 .map(bookMapper::toGetBookDetailsResponse)
-                .orElseThrow(() -> new NotFoundException(BOOK_NOT_FOUND_ID_ERROR_MESSAGE.formatted(id)));
+                .orElseThrow(() -> new NotFoundException(messageSource.getMessage(BOOK_NOT_FOUND_ID_ERROR_MESSAGE, null,
+                        LocaleContextHolder.getLocale()).formatted(id)));
     }
 
     @Override
@@ -61,7 +66,8 @@ public class BookServiceImpl implements BookService {
                 .doWith(book1 -> bookMapper.updateBook(book1, modifyBookRequest))
                 .map(bookRepository::save)
                 .map(bookMapper::toGetBookDetailsResponse)
-                .orElseThrow(() -> new NotFoundException(BOOK_NOT_FOUND_ERROR_MESSAGE.formatted(name)));
+                .orElseThrow(() -> new NotFoundException(messageSource.getMessage(BOOK_NOT_FOUND_ERROR_MESSAGE, null,
+                        LocaleContextHolder.getLocale()).formatted(name)));
     }
 
     @Override
@@ -72,7 +78,8 @@ public class BookServiceImpl implements BookService {
                 .doWith(book1 -> bookMapper.updateBook(book1, modifyBookRequest))
                 .map(bookRepository::save)
                 .map(bookMapper::toGetBookDetailsResponse)
-                .orElseThrow(() -> new NotFoundException(BOOK_NOT_FOUND_ID_ERROR_MESSAGE.formatted(id)));
+                .orElseThrow(() -> new NotFoundException(messageSource.getMessage(BOOK_NOT_FOUND_ID_ERROR_MESSAGE, null,
+                        LocaleContextHolder.getLocale()).formatted(id)));
     }
 
     @Override
@@ -81,7 +88,8 @@ public class BookServiceImpl implements BookService {
                 .of(name)
                 .map(bookRepository::findBookByName)
                 .ifPresentOrElseThrow(bookRepository::delete,
-                        () -> new NotFoundException(BOOK_NOT_FOUND_ERROR_MESSAGE.formatted(name)));
+                        () -> new NotFoundException(messageSource.getMessage(BOOK_NOT_FOUND_ERROR_MESSAGE, null,
+                                LocaleContextHolder.getLocale()).formatted(name)));
     }
 
     @Override
@@ -91,7 +99,8 @@ public class BookServiceImpl implements BookService {
                 .flatOpt(bookRepository::findById)
                 .doWith(book -> blobService.deleteImage(book.getImage()))
                 .ifPresentOrElseThrow(bookRepository::delete,
-                        () -> new NotFoundException(BOOK_NOT_FOUND_ID_ERROR_MESSAGE.formatted(id)));
+                        () -> new NotFoundException(messageSource.getMessage(BOOK_NOT_FOUND_ID_ERROR_MESSAGE, null,
+                                LocaleContextHolder.getLocale()).formatted(id)));
     }
 
     @Override
@@ -102,7 +111,8 @@ public class BookServiceImpl implements BookService {
                 .map(bookMapper::toBook)
                 .map(bookRepository::save)
                 .map(bookMapper::toGetBookDetailsResponse)
-                .orElseThrow(() -> new AlreadyExistException("Book with %s name already exist!".formatted(modifyBookRequest.getName())));
+                .orElseThrow(() -> new AlreadyExistException(messageSource.getMessage("error.book.alreadyExist", null,
+                        LocaleContextHolder.getLocale()).formatted(modifyBookRequest.getName())));
     }
 
 }

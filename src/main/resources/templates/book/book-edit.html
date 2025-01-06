@@ -2,7 +2,7 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Edit</title>
+    <title th:text="#{book.update}"></title>
     <link rel="stylesheet" type="text/css" href="/css/styles.css">
 </head>
 <body>
@@ -11,35 +11,35 @@
     <div class="book-details-container" th:object="${book}">
         <form th:action="@{/books/{id}(id=${book.id})}" th:method="PUT" enctype="multipart/form-data">
             <input type="hidden" th:field="*{id}">
-            <h1>Edit Book</h1>
+            <h1 th:text="#{book.update}">s</h1>
             <div class="book-detail">
-                <label for="name"><strong>Name:</strong></label>
+                <label for="name"><strong th:text="#{book.name}"></strong></label>
                 <small th:if="${#fields.hasErrors('name')}" style="color: red" th:errors="*{name}"></small>
                 <br th:if="${#fields.hasErrors('name')}">
-                <input class="book_field" id="name" type="text" th:value="${book.getName()}" th:field="*{name}">
+                <input class="book_field" id="name" th:placeholder="#{book.name.placeholder}" type="text" th:value="${book.getName()}" th:field="*{name}">
             </div>
             <div class="book-detail">
-                <label for="genre"><strong>Genre:</strong></label>
+                <label for="genre"><strong th:text="#{book.genre}"></strong></label>
                 <small th:if="${#fields.hasErrors('genre')}" style="color: red" th:errors="*{genre}"></small>
                 <br th:if="${#fields.hasErrors('genre')}">
-                <input class="book_field" id="genre" type="text" th:value="${book.getGenre()}" th:field="*{genre}">
+                <input class="book_field" th:placeholder="#{book.genre.placeholder}" id="genre" type="text" th:value="${book.getGenre()}" th:field="*{genre}">
             </div>
             <div class="label-select-container">
-                <label for="ageGroup"><strong>Age Group:</strong></label>
+                <label for="ageGroup"><strong th:text="#{book.age-group}"></strong></label>
                 <select id="ageGroup" name="ageGroup" th:field="*{ageGroup}">
                     <option th:each="group: ${ageGroups}"
-                            th:text="${group.name().substring(0,1) + group.name().substring(1).toLowerCase()}"
+                            th:text="#{${group}}"
                             th:value="${group}" th:selected="${group.equals(book.ageGroup)}"></option>
                 </select>
             </div>
             <div class="book-detail">
-                <label for="price"><strong>Price:</strong></label>
+                <label for="price"><strong th:text="#{book.price}"></strong></label>
                 <small th:if="${#fields.hasErrors('price')}" style="color: red" th:errors="*{price}"></small>
                 <br th:if="${#fields.hasErrors('price')}">
-                <input class="book_field" id="price" type="text" th:value="${book.getPrice()}" th:field="*{price}">
+                <input class="book_field" th:placeholder="#{book.price.placeholder}" id="price" type="text" th:value="${book.getPrice()}" th:field="*{price}">
             </div>
             <div class="book-detail">
-                <label for="publicationDate"><strong>Publication Date:</strong></label>
+                <label for="publicationDate"><strong th:text="#{book.publication-date}"></strong></label>
                 <small th:if="${#fields.hasErrors('publicationDate')}" style="color: red"
                        th:errors="*{publicationDate}"></small>
                 <br th:if="${#fields.hasErrors('publicationDate')}">
@@ -47,47 +47,47 @@
                        th:field="*{publicationDate}">
             </div>
             <div class="book-detail">
-                <label for="author"><strong>Author:</strong></label>
+                <label for="author"><strong th:text="#{book.author}"></strong></label>
                 <small th:if="${#fields.hasErrors('author')}" style="color: red" th:errors="*{author}"></small>
                 <br th:if="${#fields.hasErrors('author')}">
-                <input class="book_field" id="author" type="text" th:value="${book.getAuthor()}" th:field="*{author}">
+                <input th:placeholder="#{book.author.placeholder}" class="book_field" id="author" type="text" th:value="${book.getAuthor()}" th:field="*{author}">
             </div>
             <div class="book-detail">
-                <label for="pages"><strong>Pages:</strong></label>
+                <label for="pages"><strong th:text="#{book.pages}"></strong></label>
                 <small th:if="${#fields.hasErrors('pages')}" style="color: red" th:errors="*{pages}"></small>
                 <br th:if="${#fields.hasErrors('pages')}">
-                <input class="book_field" id="pages" type="text" th:value="${book.getPages()}" th:field="*{pages}">
+                <input th:placeholder="#{book.pages.placeholder}" class="book_field" id="pages" type="text" th:value="${book.getPages()}" th:field="*{pages}">
             </div>
             <div class="book-detail">
-                <label for="characteristics"><strong>Characteristics:</strong></label>
+                <label for="characteristics"><strong th:text="#{book.characteristics}"></strong></label>
                 <small th:if="${#fields.hasErrors('characteristics')}" style="color: red"
                        th:errors="*{characteristics}"></small>
                 <br th:if="${#fields.hasErrors('characteristics')}">
-                <input class="book_field" id="characteristics" type="text" th:value="${book.getCharacteristics()}"
+                <input th:placeholder="#{book.characteristics.placeholder}" class="book_field" id="characteristics" type="text" th:value="${book.getCharacteristics()}"
                        th:field="*{characteristics}">
             </div>
             <div class="book-detail">
-                <label for="description"><strong>Description:</strong></label>
+                <label for="description" ><strong th:text="#{book.description}"></strong></label>
                 <small th:if="${#fields.hasErrors('description')}" style="color: red"
                        th:errors="*{description}"></small>
                 <br th:if="${#fields.hasErrors('description')}">
-                <input class="book_field" id="description" type="text" th:value="${book.getDescription()}"
+                <input th:placeholder="#{book.description.placeholder}" class="book_field" id="description" type="text" th:value="${book.getDescription()}"
                        th:field="*{description}">
             </div>
 
             <div class="label-select-container">
-                <label for="language"><strong>Language:</strong></label>
+                <label for="language"><strong th:text="#{book.language}"></strong></label>
                 <select id="language" name="language" th:field="*{language}">
                     <option th:each="language: ${languages}"
-                            th:text="${language.name().substring(0,1) + language.name().substring(1).toLowerCase()}"
+                            th:text="#{${language}}"
                             th:value="${language}" th:selected="${language.equals(book.ageGroup)}"></option>
                 </select>
             </div>
             <div class="book-detail">
-                <label for="img">Image: </label>
+                <label for="img" ><strong th:text="#{book.image}"></strong></label>
                 <input id="img" type="file" th:field="*{image}" class="form-control-file">
             </div>
-            <input class="custom-button" type="submit" value="Update">
+            <input class="custom-button" type="submit" th:value="#{operations.update}">
         </form>
     </div>
 </div>

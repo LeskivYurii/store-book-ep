@@ -3,58 +3,58 @@
       xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
-    <title>Books</title>
+    <title th:text="#{book.catalog}"></title>
     <link rel="stylesheet" type="text/css" href="/css/styles.css">
 </head>
 <body>
 <div th:replace="~{/header :: header}"></div>
 <div class="catalog-body">
     <div class="catalog-container">
-        <h1>Book Catalog</h1>
+        <h1 th:text="#{book.catalog}"></h1>
         <form action="/books" method="GET">
             <div class="form-group">
-                <label for="name">Book Name</label>
-                <input type="text" id="name" name="name" placeholder="Enter book name">
+                <label for="name" th:text="#{book.catalog.search.name}"></label>
+                <input type="text" id="name" name="name" th:placeholder="#{book.catalog.search.name.placeholder}">
             </div>
             <div class="form-group">
-                <label for="genre">Genre</label>
-                <input type="text" id="genre" name="genre" placeholder="Enter genre">
+                <label for="genre" th:text="#{book.catalog.search.genre}">Genre</label>
+                <input type="text" id="genre" name="genre" th:placeholder="#{book.catalog.search.genre.placeholder}">
             </div>
             <div class="label-select-container">
-                <label for="ageGroup">Age Group</label>
+                <label for="ageGroup" th:text="#{book.catalog.search.ageGroup}"></label>
                 <select id="ageGroup" name="ageGroup">
-                    <option selected value>Any</option>
+                    <option selected value th:text="#{ANY}"></option>
                     <option th:each="age: ${ageGroups}"
-                            th:text="${age.name().substring(0,1) + age.name().substring(1).toLowerCase()}"
+                            th:text="#{${age}}"
                             th:value="${age}"></option>
                 </select>
             </div>
             <div class="form-group">
-                <label for="price">Price Range</label>
+                <label for="price" th:text="#{book.catalog.search.price.range}">Price Range</label>
                 <div id="price" style="display: flex; gap: 10px;">
-                    <input type="number" id="minPrice" name="minPrice" placeholder="Min Price" step="0.01">
-                    <input type="number" id="maxPrice" name="maxPrice" placeholder="Max Price" step="0.01">
+                    <input type="number" id="minPrice" name="minPrice" th:placeholder="#{book.catalog.search.price.min}" step="0.01">
+                    <input type="number" id="maxPrice" name="maxPrice" th:placeholder="#{book.catalog.search.price.max}" step="0.01">
                 </div>
             </div>
             <div class="form-group">
-                <label for="publicationDate">Publication Date</label>
+                <label for="publicationDate" th:text="#{book.catalog.search.publicationDate}"></label>
                 <input type="date" id="publicationDate" name="publicationDate">
             </div>
             <div class="form-group">
-                <label for="author">Author</label>
-                <input type="text" id="author" name="author" placeholder="Enter author name">
+                <label for="author" th:text="#{book.catalog.search.author}"></label>
+                <input type="text" id="author" name="author" th:placeholder="#{book.catalog.search.author.placeholder}">
             </div>
             <div class="label-select-container">
-                <label for="language">Language</label>
+                <label for="language" th:text="#{book.catalog.search.language}"></label>
                 <select id="language" name="language" >
-                    <option selected value>Any</option>
+                    <option selected value th:text="#{ANY}"></option>
                     <option th:each="language: ${languages}"
-                            th:text="${language.name().substring(0,1) + language.name().substring(1).toLowerCase()}"
+                            th:text="#{${language}}"
                             th:value="${language}"></option>
                 </select>
             </div>
             <div class="form-group">
-                <button type="submit" class="custom-button">Search</button>
+                <input type="submit" class="custom-button" th:value="#{operations.search}">
             </div>
         </form>
     </div>
@@ -65,30 +65,30 @@
                 <div class="book-info">
                     <a th:href="@{/books/{id}(id=${book.getId()})}"><h2 class="book-name"
                                                                         th:text="${book.getName()}"></h2></a>
-                    <strong>Genre: </strong>
+                    <strong th:text="#{book.genre}"></strong>
                     <p class="book-genre" th:text="${book.getGenre()}"></p>
-                    <strong>Status: </strong>
-                    <p class="book-status" th:text="${book.getQuantity()} > 0 ? 'In stock' : 'Out of stock'"></p>
-                    <strong>Price: </strong>
-                    <p class="book-price" th:text="${book.getPrice() + ' grn'}"></p>
-                    <strong>Language: </strong>
+                    <strong th:text="#{status}"></strong>
+                    <p class="book-status" th:text="#{${book.getQuantity() > 0 ? 'stock' : 'out.stock'}}"></p>
+                    <strong th:text="#{book.price}"></strong>
+                    <p class="book-price" th:text="${book.getPrice() + ' '} + #{currency}"></p>
+                    <strong th:text="#{book.language}"></strong>
                     <p class="book-language"
-                       th:text="${book.getLanguage().name().substring(0,1) + book.getLanguage().name().substring(1).toLowerCase()}"></p>
+                       th:text="#{${book.getLanguage()}}"></p>
                     <div class="book-actions" sec:authorize="hasRole('CLIENT')" th:if="${book.getQuantity()}  > 0">
                         <form th:action="@{/clients/{email}/cart(email=${#authentication.getName()})}" th:method="POST">
                             <input type="number" id="amount-1" min="1" value="1" th:name="quantity"
                                    th:max="${book.getQuantity()}">
                             <input type="hidden" th:name="bookId" th:value="${book.getId()}">
                             <input type="hidden" th:name="clientEmail" th:value="${#authentication.getName()}">
-                            <input type="submit" value="Add to Cart" class="custom-button"></input>
+                            <input type="submit" th:value="#{operations.cart.add}" class="custom-button">
                         </form>
                     </div>
                     <div class="button-group" sec:authorize="hasRole('EMPLOYEE')">
                         <form th:action="@{/books/{id}/edit-page(id=${book.getId()})}" th:method="get">
-                            <input type="submit" value="Edit" class="custom-button">
+                            <input type="submit" th:value="#{operations.update}" class="custom-button">
                         </form>
                         <form th:action="@{/books/{id}/edit-page(id=${book.getId()})}" th:method="delete">
-                            <input type="submit" value="Delete" class="custom-button">
+                            <input type="submit" th:value="#{operations.delete}" class="custom-button">
                         </form>
                     </div>
                 </div>

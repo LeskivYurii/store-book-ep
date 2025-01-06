@@ -22,31 +22,31 @@ public class ModifyBookRequest {
 
     @Min(1)
     private Long id;
-    @NotBlank(message = "Name of the book can't be empty or null!")
+    @NotBlank(message = "{book.name.validation}")
     private String name;
-    @NotBlank(message = "Genre of the book can't be empty or null!")
+    @NotBlank(message = "{book.genre.validation}")
     private String genre;
-    @NotNull(message = "Age group of the book can't be null!")
+    @NotNull(message = "{book.ageGroup.validation}")
     private AgeGroup ageGroup;
-    @DecimalMin(value = "0.0", inclusive = false, message = "Price of the book can't be zero or less!")
-    @NotNull(message = "Price of the book can't be null!")
+    @DecimalMin(value = "0.0", inclusive = false, message = "{book.price.validation.min}")
+    @NotNull(message = "{book.price.validation.notNull}")
     private BigDecimal price;
-    @NotNull(message = "Publication date of the book can't be null!")
+    @NotNull(message = "{book.price.publicationDate.notNull}")
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate publicationDate;
-    @NotBlank(message = "Author of the book can't be empty or null!")
+    @NotBlank(message = "{book.author.validation.notBlank}")
     private String author;
-    @Min(value = 1, message = "Pages of the book can't be zero or less!")
-    @NotNull(message = "Pages of the book can't be null!")
+    @Min(value = 1, message = "{book.pages.validation.min}")
+    @NotNull(message = "{book.pages.validation.notNull}")
     private Integer pages;
-    @Min(value = 1, message = "Amount of the books can't be zero or less!")
-    @NotNull(message = "Amount of the book can't be null!")
+    @Min(value = 1, message = "{book.amount.validation.min}")
+    @NotNull(message = "{book.amount.validation.notNull}")
     private Integer quantity;
-    @NotBlank(message = "Characteristics of the book can't be empty or null!")
+    @NotBlank(message = "{book.characteristics.validation.notBlank}")
     private String characteristics;
-    @NotBlank(message = "Description of the book can't be empty or null!")
+    @NotBlank(message = "{book.description.validation.notBlank}")
     private String description;
-    @NotNull(message = "Language of the book can't be null!")
+    @NotNull(message = "{book.language.validation.notNull}book.language.validation.notNull")
     private Language language;
     private MultipartFile image;
 
