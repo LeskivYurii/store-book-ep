@@ -11,6 +11,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -35,23 +36,27 @@ public class EmployeeController {
     private final AuthService authService;
 
     @GetMapping
+    @PreAuthorize("hasRole('EMPLOYEE')")
     public String getAllEmployee(@PageableDefault Pageable pageable, Model model) {
         model.addAttribute("employees", employeeService.getAllEmployees(pageable));
         return "/employee/employee-list";
     }
 
+    @PreAuthorize("hasRole('EMPLOYEE')")
     @GetMapping("/{email}")
     public String getEmployeeByEmail(@PathVariable String email, Model model) {
         model.addAttribute(EMPLOYEE_ATTRIBUTE, employeeService.getEmployeeByEmail(email));
         return  "/employee/employee-details";
     }
 
+    @PreAuthorize("hasRole('EMPLOYEE')")
     @GetMapping("/{email}/edit-page")
     public String getEditPage(@PathVariable String email, Model model) {
         model.addAttribute(EMPLOYEE_ATTRIBUTE, new UpdateEmployeeRequest(employeeService.getEmployeeByEmail(email)));
         return "/employee/employee-edit";
     }
 
+    @PreAuthorize("hasRole('EMPLOYEE')")
     @PutMapping("/{email}")
     public String updateEmployee(@PathVariable(name = "email") String email, @ModelAttribute(name = EMPLOYEE_ATTRIBUTE)
     @Valid UpdateEmployeeRequest employeeDTO, BindingResult bindingResult) {
@@ -63,12 +68,14 @@ public class EmployeeController {
         return "redirect:/employee/" + employeeDTO.getEmail();
     }
 
+    @PreAuthorize("hasRole('EMPLOYEE') or isAnonymous()")
     @GetMapping("/create-page")
     public String getCreatePage(@ModelAttribute(name = EMPLOYEE_ATTRIBUTE) CreateEmployeeRequest employeeDTO) {
         return "/employee/employee-create";
     }
 
     @PostMapping
+    @PreAuthorize("hasRole('EMPLOYEE') or isAnonymous()")
     public String createEmployee(@ModelAttribute(name = EMPLOYEE_ATTRIBUTE) @Valid CreateEmployeeRequest employeeDTO,
                                  BindingResult bindingResult) {
         if(bindingResult.hasErrors()) {
@@ -78,6 +85,7 @@ public class EmployeeController {
         return "redirect:/auth/login-page";
     }
 
+    @PreAuthorize("hasRole('EMPLOYEE')")
     @DeleteMapping("/{email}")
     public String deleteEmployeeByEmail(@AuthenticationPrincipal UserDetailsAdapter userDetailsAdapter,
                                         @PathVariable String email, HttpServletResponse httpResponse) {

@@ -1,8 +1,8 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:sec="http://www.w3.org/1999/xhtml">
+<html lang="en" xmlns:sec="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Employee list</title>
+    <title th:text="#{employee.list}"></title>
     <link rel="stylesheet" type="text/css" href="/css/styles.css">
 </head>
 <body>
@@ -11,9 +11,9 @@
 <table>
     <thead>
     <tr>
-        <th>Name</th>
-        <th>Email</th>
-        <th sec:authorize="hasRole('EMPLOYEE')">Operation</th>
+        <th th:text="#{user.name}"></th>
+        <th th:text="#{user.email}"></th>
+        <th th:text="#{operations}" sec:authorize="hasRole('EMPLOYEE')"></th>
     </tr>
     </thead>
     <tbody>
@@ -22,13 +22,13 @@
         <td th:text="${employee.getEmail()}"></td>
         <td class="button-group" sec:authorize="hasRole('EMPLOYEE')">
             <form th:action="@{/employees/{email}(email=${employee.email})}" th:method="delete">
-                <input type="submit" value="Delete" class="custom-button">
+                <input type="submit" th:value="#{operations.delete}" class="custom-button">
             </form>
             <form th:action="@{/employees/{email}/edit-page(email=${employee.email})}" th:method="get">
-                <input type="submit" value="Update" class="custom-button">
+                <input type="submit" th:value="#{operations.update}" class="custom-button">
             </form>
             <form th:action="@{/employees/{email}(email=${employee.email})}" th:method="get">
-                <input type="submit" value="Read" class="custom-button">
+                <input type="submit" th:value="#{operations.read}" class="custom-button">
             </form>
         </td>
     </tr>

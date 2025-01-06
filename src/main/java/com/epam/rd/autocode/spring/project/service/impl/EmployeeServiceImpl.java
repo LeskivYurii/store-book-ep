@@ -11,6 +11,8 @@ import com.epam.rd.autocode.spring.project.repo.EmployeeRepository;
 import com.epam.rd.autocode.spring.project.service.EmployeeService;
 import com.epam.rd.autocode.spring.project.util.Boxed;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.MessageSource;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -21,10 +23,11 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional(readOnly = true)
 public class EmployeeServiceImpl implements EmployeeService {
 
-    public static final String EMPLOYEE_NOT_FOUND_ERROR_MESSAGE = "Employee with %s email wasn't found!";
+    public static final String EMPLOYEE_NOT_FOUND_ERROR_MESSAGE = "error.employee.notfound";
 
     private final EmployeeRepository employeeRepository;
     private final EmployeeMapper employeeMapper;
+    private final MessageSource messageSource;
 
     @Override
     public Page<GetEmployeeListResponse> getAllEmployees(Pageable pageable) {
@@ -37,7 +40,8 @@ public class EmployeeServiceImpl implements EmployeeService {
                 .of(email)
                 .flatOpt(employeeRepository::findEmployeeByEmail)
                 .map(employeeMapper::toGetEmployeeDetailsResponse)
-                .orElseThrow(() -> new NotFoundException(EMPLOYEE_NOT_FOUND_ERROR_MESSAGE.formatted(email)));
+                .orElseThrow(() -> new NotFoundException(messageSource.getMessage(EMPLOYEE_NOT_FOUND_ERROR_MESSAGE, null,
+                        LocaleContextHolder.getLocale()).formatted(email)));
     }
 
     @Override
@@ -48,7 +52,8 @@ public class EmployeeServiceImpl implements EmployeeService {
                 .doWith(employee1 -> employeeMapper.updateEmployee(employee1, employeeDto))
                 .map(employeeRepository::save)
                 .map(employeeMapper::toGetEmployeeDetailsResponse)
-                .orElseThrow(() -> new NotFoundException(EMPLOYEE_NOT_FOUND_ERROR_MESSAGE.formatted(email)));
+                .orElseThrow(() -> new NotFoundException(messageSource.getMessage(EMPLOYEE_NOT_FOUND_ERROR_MESSAGE, null,
+                        LocaleContextHolder.getLocale()).formatted(email)));
     }
 
     @Override
@@ -57,7 +62,8 @@ public class EmployeeServiceImpl implements EmployeeService {
                 .of(email)
                 .flatOpt(employeeRepository::findEmployeeByEmail)
                 .ifPresentOrElseThrow(employeeRepository::delete,
-                        () -> new NotFoundException(EMPLOYEE_NOT_FOUND_ERROR_MESSAGE.formatted(email)));
+                        () -> new NotFoundException(messageSource.getMessage(EMPLOYEE_NOT_FOUND_ERROR_MESSAGE, null,
+                                LocaleContextHolder.getLocale()).formatted(email)));
     }
 
     @Override
@@ -68,8 +74,8 @@ public class EmployeeServiceImpl implements EmployeeService {
                 .map(employeeMapper::toEmployee)
                 .map(employeeRepository::save)
                 .map(employeeMapper::toGetEmployeeDetailsResponse)
-                .orElseThrow(() -> new AlreadyExistException("Employee with %s email already exist!"
-                        .formatted(employeeDTO.getEmail())));
+                .orElseThrow(() -> new AlreadyExistException(messageSource.getMessage("error.employee.alreadyExist",
+                                null, LocaleContextHolder.getLocale()).formatted(employeeDTO.getEmail())));
     }
 
 }
