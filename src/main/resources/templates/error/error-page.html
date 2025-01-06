@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>404 - Page Not Found</title>
+    <title th:text="#{error}"></title>
     <link rel="stylesheet" type="text/css" href="/css/styles.css">
 </head>
 <body>
@@ -13,9 +13,9 @@
         <h1 class="error-code" th:text="${code}"></h1>
         <h2 class="error-message" th:text="${error}"></h2>
         <p class="error-description" th:text="${message}"></p>
-        <p class="error-description" th:text="${timestamp}"></p>
-        <p class="error-description" th:text="${path}"></p>
-        <a href="/books" class="home-link">Go back to books</a>
+        <p class="error-description" th:text="#{error.date} + ' ' +${timestamp}"></p>
+        <p class="error-description" th:text="#{error.path} + ' ' +${path}"></p>
+        <a href="/books" class="home-link" th:text="#{books}"></a>
     </div>
 </div>
 </body>

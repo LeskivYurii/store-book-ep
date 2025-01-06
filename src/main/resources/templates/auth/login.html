@@ -2,14 +2,14 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Login</title>
+    <title th:text="#{login}"></title>
     <link rel="stylesheet" type="text/css" href="/css/styles.css">
 </head>
 <body>
 <div th:replace="~{/header :: header}"></div>
 <div class="login-body">
     <div class="login-container">
-        <h2>Login</h2>
+        <h2 th:text="#{login}"></h2>
         <div th:if="${logoutMessage}" class="logout-message">
             <p th:text="${logoutMessage}"></p>
         </div>
@@ -21,29 +21,29 @@
         </div>
         <form action="/auth/login" th:method="POST" th:object="${login}" class="login-form">
             <div class="form-group">
-                <label for="username">Username: </label>
+                <label for="username" th:text="#{login.username}"></label>
                 <br th:if="${#fields.hasErrors('username')}">
                 <small th:if="${#fields.hasErrors('username')}" style="color: red" th:errors="*{username}"></small>
                 <br th:if="${#fields.hasErrors('username')}">
-                <input id="username" type="email" th:field="*{username}" placeholder="Enter your email" required>
+                <input id="username" type="email" th:field="*{username}" th:placeholder="#{login.username.hint}" required>
                 <br>
-                <label for="password">Password: </label>
+                <label for="password" th:text="#{login.password}"> </label>
                 <br th:if="${#fields.hasErrors('password')}">
                 <small th:if="${#fields.hasErrors('password')}" style="color: red" th:errors="*{password} "></small>
                 <br th:if="${#fields.hasErrors('password')}">
-                <input id="password" type="password" th:field="*{password}" placeholder="Enter your password" required>
+                <input id="password" type="password" th:field="*{password}" th:placeholder="#{login.password.hint}" required>
             </div>
-            <input type="submit" class="custom-button" value="Sign in">
+            <input type="submit" class="custom-button" th:value="#{operation.sign-in}" value="Sign in">
         </form>
         <br>
         <div class="button-group">
             <form action="/clients/create-page" method="get">
-                <input class="custom-button" type="submit" value="Create client">
+                <input class="custom-button" type="submit" th:value="#{operation.signup.client}">
             </form>
             <form action="/employees/create-page" method="get" id="signUp">
-                <input class="custom-button" type="submit" value="Create Employee">
+                <input class="custom-button" type="submit" th:value="#{operation.signup.employee}">
             </form>
-            <a class="custom-button" href="http://localhost:8084/oauth2/authorization/google">Sign in with google </a>
+            <a class="custom-button"  th:text="#{operation.signup.gmail}" href="http://localhost:8084/oauth2/authorization/google"></a>
         </div>
     </div>
 

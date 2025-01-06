@@ -19,7 +19,7 @@ public class GetBookListResponse {
     private AgeGroup ageGroup;
     private BigDecimal price;
     private String author;
-    private String quantity;
+    private Integer quantity;
     private Language language;
     private String image;
 

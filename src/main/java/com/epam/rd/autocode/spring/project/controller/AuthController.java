@@ -6,6 +6,8 @@ import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.MessageSource;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -22,20 +24,24 @@ import org.springframework.web.bind.annotation.RequestParam;
 public class AuthController {
 
     private final AuthService authService;
+    private final MessageSource messageSource;
 
     @GetMapping("/login-page")
     public String getLoginPage(@RequestParam(value = "error", required = false) String error,
                                @RequestParam(value = "logout", required = false) String logout,
-                               @RequestParam(value = "blocked", required = false)String blocked, Model model) {
+                               @RequestParam(value = "blocked", required = false) String blocked, Model model) {
         model.addAttribute("login", new LoginRequest());
         if (error != null) {
-            model.addAttribute("errorMessage", "Invalid username or password!");
+            model.addAttribute("errorMessage", messageSource.getMessage("error.auth.invalidCred",
+                    null, LocaleContextHolder.getLocale()));
         }
         if (logout != null) {
-            model.addAttribute("logoutMessage", "You have been logged out successfully.");
+            model.addAttribute("logoutMessage",  messageSource.getMessage("logout.success",
+                    null, LocaleContextHolder.getLocale()));
         }
         if (blocked != null) {
-            model.addAttribute("blockedMessage", "Your account has been blocked.");
+            model.addAttribute("blockedMessage", messageSource.getMessage("error.auth.blocked",
+                    null, LocaleContextHolder.getLocale()));
         }
 
         return "/auth/login";

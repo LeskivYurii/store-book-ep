@@ -18,6 +18,7 @@ public class GetBookItemResponse {
     private String bookName;
     private Integer quantity;
     private BigDecimal price;
+    private String image;
 
     public BigDecimal getPrice() {
         return price.multiply(BigDecimal.valueOf(quantity));

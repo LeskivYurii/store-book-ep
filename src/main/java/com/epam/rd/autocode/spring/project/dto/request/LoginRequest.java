@@ -11,11 +11,10 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class LoginRequest {
 
-    @Email(message = "Email in wrong format")
+    @Email(message = "{email.validation}")
     private String username;
     @Pattern(regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d).{6,}$",
-            message = "Password must contain at least one number, lower case and upper case letters and be 6 symbols" +
-                      " long!")
+            message = "{password.validation.regex}")
     private String password;
 
 }

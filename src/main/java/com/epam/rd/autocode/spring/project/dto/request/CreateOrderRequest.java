@@ -16,10 +16,10 @@ import java.util.List;
 @NoArgsConstructor
 public class CreateOrderRequest {
 
-    @Email(message = "It's not email!")
-    @NotNull(message = "Client email can't be empty!")
+    @Email(message = "{email.validation}")
+    @NotNull(message = "{email.validation.notBlank}")
     private String clientEmail;
-    @NotEmpty(message = "Order can't be created without items!")
+    @NotEmpty(message = "{order.validation.notEmpty}")
     private List<BookItemDTO> bookItems = new ArrayList<>();
 
 }
