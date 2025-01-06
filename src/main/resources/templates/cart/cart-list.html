@@ -1,16 +1,17 @@
 <!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Cart</title>
+    <title th:text="#{cart.header}"></title>
     <link rel="stylesheet" type="text/css" href="/css/styles.css">
 </head>
 <body>
 <div th:insert="~{header.html}"></div>
 <div class="cart-body">
     <div class="cart-container">
-        <h1>Your shopping cart</h1>
-        <h1 th:if="${books.isEmpty()}"> is empty!</h1>
-        <h2 th:text="${'Your current balance: ' + client.getBalance() + ' grn'}"></h2>
+        <h1 th:text="#{cart}"></h1>
+        <h1 th:if="${books.isEmpty()}" th:text="#{cart.empty}"></h1>
+        <h2 th:text="#{cart.balance} + ' ' + ${client.getBalance() + ' '} + #{currency}"></h2>
         <div class="cart-list">
             <div class="cart-item" th:each="book, idx: ${books}">
                 <img th:if="${img} == null" src="/img/default_book_cover.jpg" alt="Book Cover">
@@ -18,20 +19,21 @@
                 <div class="cart-details">
                     <a th:href="@{/books/{id}(id=${book.getBookId()})}"><h2 class="book-name"
                                                                             th:text="${book.getBookName()}"></h2></a>
-                    <p class="book-quantity">Quantity: <span th:text="${book.getQuantity()}"></span></p>
-                    <p class="book-price">Price: <span
-                            th:text="${book.getPrice() + ' grn'}"></span></p>
+                    <p class="book-quantity"><span th:text="#{book.quantity} + ' ' + ${book.getQuantity()}"></span></p>
+                    <p class="book-price"><span th:text="#{book.price} + ' ' + ${book.getPrice()} + ' ' + #{currency}">
+
+                    </span></p>
                 </div>
                 <form th:action="@{/clients/{email}/cart/{id}(email=${#authentication.getName()}, id=${book.getId()})}"
                       th:method="delete">
-                    <input type="submit" class="custom-button" value="Remove">
+                    <input type="submit" class="custom-button" th:value="#{operations.delete}">
                 </form>
             </div>
 
             <div class="cart-summary" th:if="${!books.isEmpty()}">
-                <h2 th:text="${'Total: ' + totalPrice + ' grn'}"></h2>
+                <h2 th:text="#{cart.total} + ${' ' + totalPrice + ' '} + #{currency}"></h2>
                 <form th:action="@{/orders}" method="POST">
-                    <input type="submit" class="custom-button" th:attr="disabled=${totalPrice.compareTo(client.getBalance()) > 0 ? 'disabled' : null}">
+                    <input type="submit" th:value="#{operations.orders}" class="custom-button" th:attr="disabled=${totalPrice.compareTo(client.getBalance()) > 0 ? 'disabled' : null}">
                 </form>
             </div>
         </div>

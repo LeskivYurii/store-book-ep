@@ -13,10 +13,14 @@ import com.epam.rd.autocode.spring.project.repo.ClientRepository;
 import com.epam.rd.autocode.spring.project.service.CartItemService;
 import com.epam.rd.autocode.spring.project.util.Boxed;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.MessageSource;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+
+import static com.epam.rd.autocode.spring.project.service.impl.BookServiceImpl.BOOK_NOT_FOUND_ID_ERROR_MESSAGE;
 
 @Service
 @RequiredArgsConstructor
@@ -27,6 +31,7 @@ public class CartItemServiceImpl implements CartItemService {
     private final ClientRepository clientRepository;
     private final BookRepository bookRepository;
     private final BookItemMapper bookItemMapper;
+    private final MessageSource messageSource;
 
     public void addItemToCart(AddCartItemRequest addCartItemRequest) {
         Boxed
@@ -50,10 +55,12 @@ public class CartItemServiceImpl implements CartItemService {
 
     private CartItem toCartItem(AddCartItemRequest addCartItemRequest) {
         Book book = bookRepository.findById(addCartItemRequest.getBookId())
-                .orElseThrow(() -> new NotFoundException("Book with %s id doesn't exist".formatted(
+                .orElseThrow(() -> new NotFoundException(messageSource.getMessage(BOOK_NOT_FOUND_ID_ERROR_MESSAGE, null,
+                        LocaleContextHolder.getLocale()).formatted(
                         addCartItemRequest.getBookId())));
         Client client = clientRepository.findClientByEmail(addCartItemRequest.getClientEmail())
-                .orElseThrow(() -> new NotFoundException("Client with %s email doesn't exist!".formatted(
+                .orElseThrow(() -> new NotFoundException(messageSource.getMessage("error.client.notfound", null,
+                        LocaleContextHolder.getLocale()).formatted(
                         addCartItemRequest.getClientEmail())));
 
         return CartItem.builder()

@@ -20,7 +20,7 @@ public class AddCartItemRequest {
     @NotNull
     @Min(1)
     private Integer quantity;
-    @Email(message = "It's not an email!")
+    @Email(message = "{email.validation}")
     @NotBlank
     private String clientEmail;
 }

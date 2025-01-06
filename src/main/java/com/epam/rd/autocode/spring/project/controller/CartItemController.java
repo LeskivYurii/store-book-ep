@@ -5,6 +5,7 @@ import com.epam.rd.autocode.spring.project.dto.response.GetBookItemResponse;
 import com.epam.rd.autocode.spring.project.service.CartItemService;
 import com.epam.rd.autocode.spring.project.service.ClientService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -20,10 +21,13 @@ import java.util.List;
 @RequiredArgsConstructor
 public class CartItemController {
 
+    public static final String CART_URL="redirect:/clients/%s/cart";
+
     private final CartItemService cartItemService;
     private final ClientService clientService;
 
     @GetMapping("/clients/{email}/cart")
+    @PreAuthorize("hasRole('CLIENT') and @authExpressions.isUserAllowed(#email)")
     public String cartItems(@PathVariable String email, Model model) {
         List<GetBookItemResponse> books =  cartItemService.findClientCart(email);
         model.addAttribute("books", books);
@@ -35,22 +39,25 @@ public class CartItemController {
         return "/cart/cart-list";
     }
 
+    @PreAuthorize("hasRole('CLIENT') and @authExpressions.isUserAllowed(#email)")
     @PostMapping("/clients/{email}/cart")
     public String addItem(@PathVariable String email, @ModelAttribute(name = "item") AddCartItemRequest addCartItemRequest) {
         cartItemService.addItemToCart(addCartItemRequest);
-        return "redirect:/clients/" + email + "/cart";
+        return CART_URL.formatted(email);
     }
 
+    @PreAuthorize("hasRole('CLIENT') and @authExpressions.isUserAllowed(#email)")
     @DeleteMapping("/clients/{email}/cart/{id}")
     public String deleteItem(@PathVariable String email, @PathVariable Long id) {
         cartItemService.deleteItemFromCart(id);
-        return "redirect:/clients/" + email + "/cart";
+        return CART_URL.formatted(email);
     }
 
     @DeleteMapping("/clients/{email}/cart")
+    @PreAuthorize("hasRole('CLIENT') and @authExpressions.isUserAllowed(#email)")
     public String cleanCart(@PathVariable String email) {
         cartItemService.deleteCartByClientEmail(email);
-        return "redirect:/clients/" + email + "/cart";
+        return CART_URL.formatted(email);
     }
 
 }
