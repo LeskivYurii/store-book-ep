@@ -14,25 +14,29 @@
             <label for="name" th:text="#{user.name}"></label>
             <small th:if="${#fields.hasErrors('name')}" style="color: red" th:errors="*{name}"></small>
             <br th:if="${#fields.hasErrors('name')}">
-            <input id="name" type="text" th:value="${client.getName()}" th:field="*{name}" th:placeholder="#{user.name.placeholder}" required>
+            <input id="name" type="text" th:value="${client.getName()}" th:field="*{name}"
+                   th:placeholder="#{user.name.placeholder}" required>
         </div>
         <div  class="form-group">
             <label for="email" th:text="#{user.email}"></label>
             <small th:if="${#fields.hasErrors('email')}" style="color: red" th:errors="*{email}"></small>
             <br th:if="${#fields.hasErrors('email')}">
-            <input id="email" type="email" th:value="${client.getName()}" th:field="*{email}" th:placeholder="#{user.email.placeholder}" required>
+            <input id="email" type="email" th:value="${client.getName()}" th:field="*{email}"
+                   th:placeholder="#{user.email.placeholder}" required>
         </div>
         <div class="form-group">
             <label for="phone" th:text="#{user.phone}"></label>
             <small th:if="${#fields.hasErrors('phone')}" style="color: red" th:errors="*{phone}"></small>
             <br th:if="${#fields.hasErrors('phone')}">
-            <input id="phone" th:placeholder="#{user.phone.placeholder}" type="text" th:value="${client.getPhone()}" th:field="*{phone}">
+            <input id="phone" th:placeholder="#{user.phone.placeholder}" type="text" th:value="${client.getPhone()}"
+                   th:field="*{phone}">
         </div>
         <div  class="form-group">
             <label for="password" th:text="#{user.password}"></label>
             <small th:if="${#fields.hasErrors('password')}" style="color: red" th:errors="*{password}"></small>
             <br th:if="${#fields.hasErrors('password')}">
-            <input id="password" type="password" th:value="${client.getPassword()}" th:field="*{password}" th:placeholder="#{user.password.placeholder}" minlength="6" required>
+            <input id="password" type="password" th:value="${client.getPassword()}" th:field="*{password}"
+                   th:placeholder="#{user.password.placeholder}" minlength="6" required>
         </div>
         <div  class="form-group">
             <label for="confirmationPassword" th:text="#{user.confirmationPassword}"></label>
@@ -40,7 +44,8 @@
                    th:errors="*{confirmationPassword}"></small>
             <br th:if="${#fields.hasErrors('confirmationPassword')}">
             <input id="confirmationPassword" type="password" th:value="${client.getConfirmationPassword()}"
-                   th:field="*{confirmationPassword}" th:placeholder="#{user.confirmationPassword.placeholder}" minlength="6" required>
+                   th:field="*{confirmationPassword}" th:placeholder="#{user.confirmationPassword.placeholder}"
+                   minlength="6" required>
         </div>
         <input type="submit" class="custom-button" th:value="#{operations.create}">
     </form>

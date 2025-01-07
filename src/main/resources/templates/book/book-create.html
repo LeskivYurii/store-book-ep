@@ -16,13 +16,15 @@
                 <label for="name" th:text="#{book.name}"></label>
                 <small th:if="${#fields.hasErrors('name')}" style="color: red" th:errors="*{name}"></small>
                 <br th:if="${#fields.hasErrors('name')}">
-                <input th:placeholder="#{book.name.placeholder}" class="book_field" id="name" type="text" th:value="${book.getName()}" th:field="*{name}">
+                <input th:placeholder="#{book.name.placeholder}" class="book_field" id="name" type="text"
+                       th:value="${book.getName()}" th:field="*{name}">
             </div>
             <div class="book-detail">
                 <label for="genre" th:text="#{book.genre}"></label>
                 <small th:if="${#fields.hasErrors('genre')}" style="color: red" th:errors="*{genre}"></small>
                 <br th:if="${#fields.hasErrors('genre')}">
-                <input class="book_field" id="genre" type="text" th:placeholder="#{book.genre.placeholder}" th:value="${book.getGenre()}" th:field="*{genre}">
+                <input class="book_field" id="genre" type="text" th:placeholder="#{book.genre.placeholder}"
+                       th:value="${book.getGenre()}" th:field="*{genre}">
             </div>
             <div class="label-select-container">
                 <label for="ageGroup" th:text="#{book.age-group}"></label>
@@ -36,7 +38,8 @@
                 <label for="price" th:text="#{book.price}"> </label>
                 <small th:if="${#fields.hasErrors('price')}" style="color: red" th:errors="*{price}"></small>
                 <br th:if="${#fields.hasErrors('price')}">
-                <input th:placeholder="#{book.price.placeholder}" class="book_field" id="price" type="number" th:value="${book.getPrice()}" th:field="*{price}">
+                <input th:placeholder="#{book.price.placeholder}" class="book_field" id="price" type="number"
+                       th:value="${book.getPrice()}" th:field="*{price}">
             </div>
             <div class="book-detail">
                 <label for="publicationDate" th:text="#{book.publication-date}"></label>
@@ -50,7 +53,8 @@
                 <label for="author" th:text="#{book.author}"> </label>
                 <small th:if="${#fields.hasErrors('author')}" style="color: red" th:errors="*{author}"></small>
                 <br th:if="${#fields.hasErrors('author')}">
-                <input th:placeholder="#{book.author.placeholder}" class="book_field" id="author" type="text" th:value="${book.getAuthor()}" th:field="*{author}">
+                <input th:placeholder="#{book.author.placeholder}" class="book_field" id="author" type="text"
+                       th:value="${book.getAuthor()}" th:field="*{author}">
             </div>
             <div class="book-detail">
                 <label for="pages" th:text="#{book.pages}"></label>
@@ -93,7 +97,8 @@
             </div>
             <div class="book-detail">
                 <label for="img" th:text="#{book.image}"></label>
-                <input th:value="#{book.image.placeholder}" id="img" type="file" th:field="*{image}" class="form-control-file">
+                <input th:value="#{book.image.placeholder}" id="img" type="file" accept="image/*" th:field="*{image}"
+                       class="form-control-file">
             </div>
             <input type="submit" th:value="#{operations.create}" class="custom-button">
         </form>

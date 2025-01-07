@@ -16,13 +16,15 @@
                 <label for="name"><strong th:text="#{book.name}"></strong></label>
                 <small th:if="${#fields.hasErrors('name')}" style="color: red" th:errors="*{name}"></small>
                 <br th:if="${#fields.hasErrors('name')}">
-                <input class="book_field" id="name" th:placeholder="#{book.name.placeholder}" type="text" th:value="${book.getName()}" th:field="*{name}">
+                <input class="book_field" id="name" th:placeholder="#{book.name.placeholder}" type="text"
+                       th:value="${book.getName()}" th:field="*{name}">
             </div>
             <div class="book-detail">
                 <label for="genre"><strong th:text="#{book.genre}"></strong></label>
                 <small th:if="${#fields.hasErrors('genre')}" style="color: red" th:errors="*{genre}"></small>
                 <br th:if="${#fields.hasErrors('genre')}">
-                <input class="book_field" th:placeholder="#{book.genre.placeholder}" id="genre" type="text" th:value="${book.getGenre()}" th:field="*{genre}">
+                <input class="book_field" th:placeholder="#{book.genre.placeholder}" id="genre" type="text"
+                       th:value="${book.getGenre()}" th:field="*{genre}">
             </div>
             <div class="label-select-container">
                 <label for="ageGroup"><strong th:text="#{book.age-group}"></strong></label>
@@ -36,7 +38,8 @@
                 <label for="price"><strong th:text="#{book.price}"></strong></label>
                 <small th:if="${#fields.hasErrors('price')}" style="color: red" th:errors="*{price}"></small>
                 <br th:if="${#fields.hasErrors('price')}">
-                <input class="book_field" th:placeholder="#{book.price.placeholder}" id="price" type="text" th:value="${book.getPrice()}" th:field="*{price}">
+                <input class="book_field" th:placeholder="#{book.price.placeholder}" id="price" type="text"
+                       th:value="${book.getPrice()}" th:field="*{price}">
             </div>
             <div class="book-detail">
                 <label for="publicationDate"><strong th:text="#{book.publication-date}"></strong></label>
@@ -50,20 +53,23 @@
                 <label for="author"><strong th:text="#{book.author}"></strong></label>
                 <small th:if="${#fields.hasErrors('author')}" style="color: red" th:errors="*{author}"></small>
                 <br th:if="${#fields.hasErrors('author')}">
-                <input th:placeholder="#{book.author.placeholder}" class="book_field" id="author" type="text" th:value="${book.getAuthor()}" th:field="*{author}">
+                <input th:placeholder="#{book.author.placeholder}" class="book_field" id="author" type="text"
+                       th:value="${book.getAuthor()}" th:field="*{author}">
             </div>
             <div class="book-detail">
                 <label for="pages"><strong th:text="#{book.pages}"></strong></label>
                 <small th:if="${#fields.hasErrors('pages')}" style="color: red" th:errors="*{pages}"></small>
                 <br th:if="${#fields.hasErrors('pages')}">
-                <input th:placeholder="#{book.pages.placeholder}" class="book_field" id="pages" type="text" th:value="${book.getPages()}" th:field="*{pages}">
+                <input th:placeholder="#{book.pages.placeholder}" class="book_field" id="pages" type="text"
+                       th:value="${book.getPages()}" th:field="*{pages}">
             </div>
             <div class="book-detail">
                 <label for="characteristics"><strong th:text="#{book.characteristics}"></strong></label>
                 <small th:if="${#fields.hasErrors('characteristics')}" style="color: red"
                        th:errors="*{characteristics}"></small>
                 <br th:if="${#fields.hasErrors('characteristics')}">
-                <input th:placeholder="#{book.characteristics.placeholder}" class="book_field" id="characteristics" type="text" th:value="${book.getCharacteristics()}"
+                <input th:placeholder="#{book.characteristics.placeholder}" class="book_field" id="characteristics"
+                       type="text" th:value="${book.getCharacteristics()}"
                        th:field="*{characteristics}">
             </div>
             <div class="book-detail">
@@ -71,7 +77,8 @@
                 <small th:if="${#fields.hasErrors('description')}" style="color: red"
                        th:errors="*{description}"></small>
                 <br th:if="${#fields.hasErrors('description')}">
-                <input th:placeholder="#{book.description.placeholder}" class="book_field" id="description" type="text" th:value="${book.getDescription()}"
+                <input th:placeholder="#{book.description.placeholder}" class="book_field" id="description" type="text"
+                       th:value="${book.getDescription()}"
                        th:field="*{description}">
             </div>
 

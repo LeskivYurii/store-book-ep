@@ -83,7 +83,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(AccessDeniedException.class)
     public ModelAndView handleAccessDeniedException(AccessDeniedException e, HttpServletRequest request) {
-        ModelAndView mav = setDetails(e, request, HttpStatus.INTERNAL_SERVER_ERROR);
+        ModelAndView mav = setDetails(e, request, HttpStatus.FORBIDDEN);
         mav.addObject(MESSAGE, messageSource.getMessage("error.access.denied", null,
                 LocaleContextHolder.getLocale()));
         return mav;

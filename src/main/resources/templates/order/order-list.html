@@ -46,8 +46,10 @@
                     </div>
                 </td>
                 <td>
-                    <input sec:authorize="hasRole('EMPLOYEE')" type="submit" th:value="#{operations.update}" class="custom-button">
-                    <a sec:authorize="isAuthenticated()" th:href="@{/orders/{id}(id=${order.getId()})}" class="custom-button" th:text="#{operations.read}"></a>
+                    <input sec:authorize="hasRole('EMPLOYEE')" type="submit" th:value="#{operations.update}"
+                           class="custom-button">
+                    <a sec:authorize="isAuthenticated()" th:href="@{/orders/{id}(id=${order.getId()})}"
+                       class="custom-button" th:text="#{operations.read}"></a>
                 </td>
             </form>
 

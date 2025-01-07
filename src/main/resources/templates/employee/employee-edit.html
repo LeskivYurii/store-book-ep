@@ -8,25 +8,29 @@
 <body>
 <div th:insert="~{header.html}"></div>
 <div class="employee-body">
-    <form th:action="@{/employees/{email}(email=${employee.email})}" th:method="PUT" th:object="${employee}" class="form-container">
+    <form th:action="@{/employees/{email}(email=${employee.email})}" th:method="PUT" th:object="${employee}"
+          class="form-container">
         <h2 th:text="#{employee.edit}"></h2>
         <div class="form-group">
             <label for="name" th:text="#{user.name}"></label>
             <small th:if="${#fields.hasErrors('name')}" style="color: red" th:errors="*{name}"></small>
             <br th:if="${#fields.hasErrors('name')}">
-            <input id="name" th:placeholder="#{user.name.placeholder}" type="text" th:value="${employee.getName()}" th:field="*{name}">
+            <input id="name" th:placeholder="#{user.name.placeholder}" type="text" th:value="${employee.getName()}"
+                   th:field="*{name}">
         </div>
         <div class="form-group">
             <label for="email" th:text="#{user.email}"></label>
             <small th:if="${#fields.hasErrors('email')}" style="color: red" th:errors="*{email}"></small>
             <br th:if="${#fields.hasErrors('email')}">
-            <input id="email" type="email" th:placeholder="#{user.email.placeholder}" th:value="${employee.getName()}" th:field="*{email}">
+            <input id="email" type="email" th:placeholder="#{user.email.placeholder}" th:value="${employee.getName()}"
+                   th:field="*{email}">
         </div>
         <div class="form-group">
             <label for="phone" th:text="#{user.phone}"> </label>
             <small th:if="${#fields.hasErrors('phone')}" style="color: red" th:errors="*{phone}"></small>
             <br th:if="${#fields.hasErrors('phone')}">
-            <input id="phone" th:placeholder="#{user.phone.placeholder}" type="text" th:value="${employee.getPhone()}" th:field="*{phone}">
+            <input id="phone" th:placeholder="#{user.phone.placeholder}" type="text" th:value="${employee.getPhone()}"
+                   th:field="*{phone}">
         </div>
         <div class="form-group">
             <label for="birthDate" th:text="#{employee.birthday}"></label>
@@ -38,7 +42,8 @@
             <label for="password" th:text="#{user.password}"></label>
             <small th:if="${#fields.hasErrors('password')}" style="color: red" th:errors="*{password}"></small>
             <br th:if="${#fields.hasErrors('password')}">
-            <input id="password" type="password" th:placeholder="#{user.password.placeholder}" th:value="${employee.getPassword()}" th:field="*{password}">
+            <input id="password" type="password" th:placeholder="#{user.password.placeholder}"
+                   th:value="${employee.getPassword()}" th:field="*{password}">
         </div>
         <div class="form-group">
             <label for="confirmationPassword" th:text="#{user.confirmationPassword}"></label>
@@ -53,7 +58,8 @@
             <small th:if="${#fields.hasErrors('oldPassword')}" style="color: red"
                    th:errors="*{oldPassword}"></small>
             <br th:if="${#fields.hasErrors('oldPassword')}">
-            <input th:placeholder="#{user.oldPassword.placeholder}" id="oldPassword" type="password" th:value="${employee.getOldPassword()}" th:field="*{oldPassword}">
+            <input th:placeholder="#{user.oldPassword.placeholder}" id="oldPassword" type="password"
+                   th:value="${employee.getOldPassword()}" th:field="*{oldPassword}">
         </div>
         <input type="submit" th:value="#{operations.update}" class="custom-button">
     </form>
