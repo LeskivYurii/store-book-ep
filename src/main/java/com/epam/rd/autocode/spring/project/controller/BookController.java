@@ -36,11 +36,6 @@ public class BookController {
     private final BookService bookService;
     private final BookCriteriaService bookCriteriaService;
 
-    @GetMapping("/search")
-    public String search() {
-        return "/book/book-list";
-    }
-
     @GetMapping
     public String getBooks(@PageableDefault Pageable pageable, Model model,
                            @RequestParam(required = false) String name, @RequestParam(required = false) String genre,
