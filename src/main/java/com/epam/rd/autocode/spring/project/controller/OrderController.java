@@ -26,7 +26,7 @@ public class OrderController {
     public String getAllClientOrders(@PathVariable String email, @PageableDefault Pageable pageable, Model model) {
         model.addAttribute("orders", orderService.getOrdersByClient(email, pageable));
         model.addAttribute("statuses", OrderStatus.values());
-        return "/order/order-list";
+        return "order/order-list";
     }
 
     @PreAuthorize("hasRole('EMPLOYEE')")
@@ -34,7 +34,7 @@ public class OrderController {
     public String getAllEmployeeOrders(@PathVariable String email, @PageableDefault Pageable pageable, Model model) {
         model.addAttribute("orders", orderService.getOrdersByEmployee(email, pageable));
         model.addAttribute("statuses", OrderStatus.values());
-        return "/order/order-list";
+        return "order/order-list";
     }
 
     @PostMapping("/orders")
@@ -50,7 +50,7 @@ public class OrderController {
     public String getAllOrders(Model model, @PageableDefault Pageable pageable) {
         model.addAttribute("orders", orderService.findAll(pageable));
         model.addAttribute("statuses", OrderStatus.values());
-        return "/order/order-list";
+        return "order/order-list";
     }
 
     @PreAuthorize("hasRole('EMPLOYEE') or @authExpressions.isClientOrder(#id)")
@@ -58,7 +58,7 @@ public class OrderController {
     public String findOrderById(@PathVariable Long id, Model model) {
         model.addAttribute("order", orderService.findOrderById(id));
         model.addAttribute("statuses", OrderStatus.values());
-        return "/order/order-details";
+        return "order/order-details";
     }
 
     @PreAuthorize("hasRole('EMPLOYEE')")

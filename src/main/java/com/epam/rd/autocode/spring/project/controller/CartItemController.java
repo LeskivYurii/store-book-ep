@@ -36,7 +36,7 @@ public class CartItemController {
                 .stream()
                 .map(GetBookItemResponse::getPrice)
                 .reduce(BigDecimal::add).orElse(BigDecimal.ZERO));
-        return "/cart/cart-list";
+        return "cart/cart-list";
     }
 
     @PreAuthorize("hasRole('CLIENT') and @authExpressions.isUserAllowed(#email)")

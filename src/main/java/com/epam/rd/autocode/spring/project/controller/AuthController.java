@@ -44,14 +44,14 @@ public class AuthController {
                     null, LocaleContextHolder.getLocale()));
         }
 
-        return "/auth/login";
+        return "auth/login";
     }
 
     @PostMapping("/login")
     public String verifyCredentials(@ModelAttribute(name = "login") @Valid LoginRequest loginRequest,
                                     BindingResult bindingResult, HttpServletResponse response) {
         if (bindingResult.hasErrors()) {
-            return "/auth/login";
+            return "auth/login";
         }
         Cookie cookie = authService.login(loginRequest);
         response.addCookie(cookie);

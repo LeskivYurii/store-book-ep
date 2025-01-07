@@ -40,27 +40,27 @@ public class ClientController {
     @PreAuthorize("hasRole('EMPLOYEE')")
     public String getAllClient(@PageableDefault Pageable pageable, Model model) {
         model.addAttribute("clients", clientService.getAllClients(pageable));
-        return "/client/client-list";
+        return "client/client-list";
     }
 
     @PreAuthorize("hasRole('EMPLOYEE') or @authExpressions.isUserAllowed(#email)")
     @GetMapping("/{email}")
     public String getClientByEmail(@PathVariable String email, Model model) {
         model.addAttribute(CLIENT_ATTRIBUTE, clientService.getClientByEmail(email));
-        return "/client/client-details";
+        return "client/client-details";
     }
 
     @PreAuthorize("hasRole('EMPLOYEE') or @authExpressions.isUserAllowed(#email)")
     @GetMapping("/{email}/edit-page")
     public String getEditPage(@PathVariable String email, Model model) {
         model.addAttribute(CLIENT_ATTRIBUTE, new UpdateClientRequest(clientService.getClientByEmail(email)));
-        return "/client/client-edit";
+        return "client/client-edit";
     }
 
     @PreAuthorize("hasRole('EMPLOYEE') or isAnonymous()")
     @GetMapping("/create-page")
     public String getCreatePage(@ModelAttribute(name = CLIENT_ATTRIBUTE) CreateClientRequest clientDTO) {
-        return "/client/client-create";
+        return "client/client-create";
     }
 
     @PostMapping
@@ -68,7 +68,7 @@ public class ClientController {
     public String createClient(@ModelAttribute(name = CLIENT_ATTRIBUTE) @Valid CreateClientRequest clientDTO,
                                BindingResult bindingResult) {
         if(bindingResult.hasErrors()) {
-            return "/client/client-create";
+            return "client/client-create";
         }
         clientService.addClient(clientDTO);
         return "redirect:/auth/login-page";
@@ -80,7 +80,7 @@ public class ClientController {
     UpdateClientRequest clientDTO, BindingResult bindingResult) {
         userOldPasswordValidation.validate(clientDTO, bindingResult);
         if(bindingResult.hasErrors()) {
-            return "/client/client-edit";
+            return "client/client-edit";
         }
         clientService.updateClientByEmail(email, clientDTO);
         return "redirect:/clients/" + clientDTO.getEmail();

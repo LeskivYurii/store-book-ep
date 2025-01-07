@@ -39,21 +39,21 @@ public class EmployeeController {
     @PreAuthorize("hasRole('EMPLOYEE')")
     public String getAllEmployee(@PageableDefault Pageable pageable, Model model) {
         model.addAttribute("employees", employeeService.getAllEmployees(pageable));
-        return "/employee/employee-list";
+        return "employee/employee-list";
     }
 
     @PreAuthorize("hasRole('EMPLOYEE')")
     @GetMapping("/{email}")
     public String getEmployeeByEmail(@PathVariable String email, Model model) {
         model.addAttribute(EMPLOYEE_ATTRIBUTE, employeeService.getEmployeeByEmail(email));
-        return  "/employee/employee-details";
+        return  "employee/employee-details";
     }
 
     @PreAuthorize("hasRole('EMPLOYEE')")
     @GetMapping("/{email}/edit-page")
     public String getEditPage(@PathVariable String email, Model model) {
         model.addAttribute(EMPLOYEE_ATTRIBUTE, new UpdateEmployeeRequest(employeeService.getEmployeeByEmail(email)));
-        return "/employee/employee-edit";
+        return "employee/employee-edit";
     }
 
     @PreAuthorize("hasRole('EMPLOYEE')")
@@ -62,7 +62,7 @@ public class EmployeeController {
     @Valid UpdateEmployeeRequest employeeDTO, BindingResult bindingResult) {
         userOldPasswordValidation.validate(employeeDTO, bindingResult);
         if(bindingResult.hasErrors()) {
-            return "/employee/employee-edit";
+            return "employee/employee-edit";
         }
         employeeService.updateEmployeeByEmail(email, employeeDTO);
         return "redirect:/employee/" + employeeDTO.getEmail();
@@ -71,7 +71,7 @@ public class EmployeeController {
     @PreAuthorize("hasRole('EMPLOYEE') or isAnonymous()")
     @GetMapping("/create-page")
     public String getCreatePage(@ModelAttribute(name = EMPLOYEE_ATTRIBUTE) CreateEmployeeRequest employeeDTO) {
-        return "/employee/employee-create";
+        return "employee/employee-create";
     }
 
     @PostMapping
@@ -79,7 +79,7 @@ public class EmployeeController {
     public String createEmployee(@ModelAttribute(name = EMPLOYEE_ATTRIBUTE) @Valid CreateEmployeeRequest employeeDTO,
                                  BindingResult bindingResult) {
         if(bindingResult.hasErrors()) {
-            return "/employee/employee-create";
+            return "employee/employee-create";
         }
         employeeService.addEmployee(employeeDTO);
         return "redirect:/auth/login-page";

@@ -47,13 +47,13 @@ public class BookController {
                 genre, ageGroup, minPrice, maxPrice, author, publicationDate, language)));
         model.addAttribute(LANGUAGES_ATTRIBUTE, Language.values());
         model.addAttribute(AGE_GROUP_ATTRIBUTE, AgeGroup.values());
-        return "/book/book-list";
+        return "book/book-list";
     }
 
     @GetMapping("/{id}")
     public String findBookById(@PathVariable Long id, Model model) {
         model.addAttribute("book", bookService.getBookById(id));
-        return "/book/book-details";
+        return "book/book-details";
     }
 
     @DeleteMapping("/{id}")
@@ -69,7 +69,7 @@ public class BookController {
         model.addAttribute("book", bookService.getBookById(id));
         model.addAttribute(AGE_GROUP_ATTRIBUTE, AgeGroup.values());
         model.addAttribute(LANGUAGES_ATTRIBUTE, Language.values());
-        return "/book/book-edit";
+        return "book/book-edit";
     }
 
     @PutMapping("/{id}")
@@ -79,7 +79,7 @@ public class BookController {
         if (bindingResult.hasErrors()) {
             model.addAttribute(AGE_GROUP_ATTRIBUTE, AgeGroup.values());
             model.addAttribute(LANGUAGES_ATTRIBUTE, Language.values());
-            return "/book/book-edit";
+            return "book/book-edit";
         }
         bookService.updateBookById(id, book);
         return "redirect:/books/" + id;
@@ -90,7 +90,7 @@ public class BookController {
     public String getCreatePage(@ModelAttribute(name = "book") ModifyBookRequest modifyBookRequest, Model model) {
         model.addAttribute(AGE_GROUP_ATTRIBUTE, AgeGroup.values());
         model.addAttribute(LANGUAGES_ATTRIBUTE, Language.values());
-        return "/book/book-create";
+        return "book/book-create";
     }
 
     @PostMapping
@@ -100,7 +100,7 @@ public class BookController {
         if (bindingResult.hasErrors()) {
             model.addAttribute(AGE_GROUP_ATTRIBUTE, AgeGroup.values());
             model.addAttribute(LANGUAGES_ATTRIBUTE, Language.values());
-            return "/book/book-create";
+            return "book/book-create";
         }
         GetBookDetailsResponse getBookDetailsResponse = bookService.addBook(book);
         return "redirect:/books/" + getBookDetailsResponse.getId();
