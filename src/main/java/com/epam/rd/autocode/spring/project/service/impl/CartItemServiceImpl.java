@@ -24,7 +24,7 @@ import static com.epam.rd.autocode.spring.project.service.impl.BookServiceImpl.B
 
 @Service
 @RequiredArgsConstructor
-@Transactional(readOnly = true)
+@Transactional
 public class CartItemServiceImpl implements CartItemService {
 
     private final CartItemRepository cartItemRepository;
@@ -40,6 +40,7 @@ public class CartItemServiceImpl implements CartItemService {
                 .ifPresent(cartItemRepository::save);
     }
 
+    @Transactional(readOnly = true)
     public List<GetBookItemResponse> findClientCart(String email) {
         return cartItemRepository.findAllByClientEmail(email).stream().map(bookItemMapper::toGetBookItemRequest).toList();
     }

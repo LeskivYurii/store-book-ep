@@ -52,17 +52,6 @@ CREATE TABLE IF NOT EXISTS ORDERS
     constraint employee_fk FOREIGN KEY (employee_id) REFERENCES USERS (id)
 );
 
-CREATE TABLE IF NOT EXISTS "BOOK_ITEMS"
-(
-    id       bigint generated always as identity,
-    order_id bigint  not null,
-    book_id  bigint  not null,
-    quantity integer not null,
-
-    constraint book_item_pk PRIMARY KEY (id),
-    constraint order_fk FOREIGN KEY (order_id) REFERENCES ORDERS (id),
-    constraint book_fk FOREIGN KEY (book_id) REFERENCES BOOKS (id)
-);
 
 CREATE TABLE IF NOT EXISTS CART_ITEM
 (
@@ -74,4 +63,16 @@ CREATE TABLE IF NOT EXISTS CART_ITEM
     constraint cart_item_pk primary key (id),
     constraint user_cart_item_fk FOREIGN KEY (client_id) REFERENCES USERS (id),
     constraint book_cart_item_fk FOREIGN KEY (book_id) REFERENCES BOOKS (id)
-)
+);
+
+CREATE TABLE IF NOT EXISTS BOOK_ITEMS
+(
+    id       bigint generated always as identity,
+    order_id bigint  not null,
+    book_id  bigint  not null,
+    quantity integer not null,
+
+    constraint book_item_pk PRIMARY KEY (id),
+    constraint order_fk FOREIGN KEY (order_id) REFERENCES ORDERS (id),
+    constraint book_fk FOREIGN KEY (book_id) REFERENCES BOOKS (id)
+);
